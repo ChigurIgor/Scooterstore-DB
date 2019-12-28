@@ -14,7 +14,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://madcat:masterminde+1@ds117070.mlab.com:17070/scooterstore";
 const mongoClient = new MongoClient(url, { useNewUrlParser: true });
 // создаем объект MongoClient и передаем ему строку подключения
-const dbName="ticketservice";
+const dbName="scooterstore";
 
 let timeCicle=0;
 let timeout=60000;
@@ -51,7 +51,7 @@ app.use(bodyParser.json());
 
 
     // place.row=0;
-// // -------------------------------------------------------- events --------------------------------------------------------------------------
+// // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
 //
 //
@@ -141,56 +141,56 @@ app.use(bodyParser.json());
 //
 // }
 //
-// app.post('/getevents',(req,res)=>{
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     let id="";
-//
-//     let body = '';
-//     // req.on('data', chunk => {
-//     //     body += chunk.toString(); // convert Buffer to string
-//     // });
-//     // req.on('end', () => {
-//     //     var post = qs.parse(body);
-//     //
-//     //     console.log(body);
-//     //     id=post.id;
-//     //
-//     //     getEvents(id,res);
-//     // });
-//
-//     getEvents(id,res);
-//
-// });
-//
-// function getEvents(id,res){
-//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-//         if (err){
-//             console.error('An error occurred connecting to MongoDB: ',err);
-//         }else {
-//             const db = client.db(dbName);
-//             var answer = "0";
-//             // var allProductsArray = db.collection("phones").find().toArray();
-//             try {
-//
-//
-//                 await db.collection("events").find().toArray(function (err, documents) {
-//                     // console.log(documents);
-//
-//                     res.end(JSON.stringify(documents));
-//
-//
-//                 });
-//             } finally {
-//                 if (db) mongoClientPromise.close();
-//                 console.log("client.close()");
-//
-//             }
-//         }
-//
-//     });
-// }
-//
+app.post('/getitems',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let id="";
+
+    let body = '';
+    // req.on('data', chunk => {
+    //     body += chunk.toString(); // convert Buffer to string
+    // });
+    // req.on('end', () => {
+    //     var post = qs.parse(body);
+    //
+    //     console.log(body);
+    //     id=post.id;
+    //
+    //     getEvents(id,res);
+    // });
+
+    getItems(id,res);
+
+});
+
+function getItems(id,res){
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            var answer = "0";
+            // var allProductsArray = db.collection("phones").find().toArray();
+            try {
+
+
+                await db.collection("items").find().toArray(function (err, documents) {
+                    // console.log(documents);
+
+                    res.end(JSON.stringify(documents));
+
+
+                });
+            } finally {
+                if (db) mongoClientPromise.close();
+                console.log("client.close()");
+
+            }
+        }
+
+    });
+}
+
 // app.post('/geteventbyid',(req,res)=>{
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -248,7 +248,7 @@ app.use(bodyParser.json());
 //
 //
 //
-// // -------------------------------------------------------- events --------------------------------------------------------------------------
+// // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
 //
 //
