@@ -16,20 +16,20 @@ const mongoClient = new MongoClient(url, { useNewUrlParser: true });
 // создаем объект MongoClient и передаем ему строку подключения
 const dbName="scooterstore";
 
-let timeCicle=0;
-let timeout=60000;
+// let timeCicle=0;
+// let timeout=60000;
 
-setInterval(function() {
-    console.log('setInterval');
-    timeCicle++;
-    console.log(timeCicle);
-
-    var timeInMs = Date.now();
-    console.log(timeInMs);
-
-    searchReserve(timeInMs);
-
-}, timeout);
+// setInterval(function() {
+//     console.log('setInterval');
+//     timeCicle++;
+//     console.log(timeCicle);
+//
+//     var timeInMs = Date.now();
+//     console.log(timeInMs);
+//
+//     searchReserve(timeInMs);
+//
+// }, timeout);
 
 var app=express();
 
