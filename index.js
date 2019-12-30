@@ -50,204 +50,63 @@ app.use(bodyParser.json());
 
 
 
-    // place.row=0;
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
-//
-//
-//
-// app.post('/eventadd',(req,res)=>{
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     let date="";
-//     let description="";
-//     let eventName="";
-//     let eventStar="";
-//     let hall="";
-//     let imgMain="";
-//     let imgPreview="";
-//     let places=[];
-//     let priceEnd=0;
-//     let priceStart=0;
-//     let ticketsAvailable=0;
-//     let category="";
-//     // let place={};
-//     // place.category="";
-//     // place.price=0;
-//     // place.seat=0;
-//     // var obj=JSON.stringify(works);
-//     // works=obj;
-//     let body = '';
-//     req.on('data', chunk => {
-//         body += chunk.toString(); // convert Buffer to string
-//     });
-//     req.on('end', () => {
-//         var post = qs.parse(body);
-//
-//         console.log(body);
-//         date=post.date;
-//         description=post.description;
-//         eventName=post.eventName;
-//         eventStar=post.eventStar;
-//         hall=post.hall;
-//         imgMain=post.imgMain;
-//         imgPreview=post.imgPreview;
-//         places=post.places;
-//         priceEnd=post.priceEnd;
-//         priceStart=post.priceStart;
-//         ticketsAvailable=post.ticketsAvailable;
-//         category=post.category;
-//
-//         eventAdd(date,description,eventName,eventStar,hall,imgMain,imgPreview,places,priceEnd,priceStart,ticketsAvailable,category);
-//         res.end(JSON.stringify({ msg: "OK" }));
-//     });
-//
-// });
 
-// function eventAdd(date,description,eventName,eventStar,hall,imgMain,imgPreview,places,priceEnd,priceStart,ticketsAvailable,category) {
-//
-//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-//         const db = client.db(dbName);
-//
-//         const collection = db.collection("events");
-//         let event = {
-//                     category:category,
-//                     date: date,
-//                     description:description,
-//                     eventName:eventName,
-//                     eventStar:eventStar,
-//                     hall:hall,
-//                     imgMain:imgMain,
-//                     imgPreview:imgPreview,
-//                     places:places,
-//                     priceEnd:priceEnd,
-//                     priceStart:priceStart,
-//                     ticketsAvailable:ticketsAvailable};
-//         try {
-//             await collection.insertOne(event, function (err, result) {
-//
-//                 if (err) {
-//                     return console.log(err);
-//                 }
-//                 console.log(result.ops);
-//
-//             });
-//         } finally {
-//             if (db) mongoClientPromise.close();
-//             console.log("client.close()");
-//             res.end(JSON.stringify({ msg: "OK" }));
-//         }
-//     });
-//
-//
-// }
-//
 app.get('/getitems',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    let id="";
-
-    let body = '';
-    // req.on('data', chunk => {
-    //     body += chunk.toString(); // convert Buffer to string
-    // });
-    // req.on('end', () => {
-    //     var post = qs.parse(body);
-    //
-    //     console.log(body);
-    //     id=post.id;
-    //
-    //     getEvents(id,res);
-    // });
-
-    getItems(id,res);
-
+    getItems(res);
 });
 
-function getItems(id,res){
+function getItems(res){
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
         }else {
             const db = client.db(dbName);
-            var answer = "0";
-            // var allProductsArray = db.collection("phones").find().toArray();
             try {
-
-
                 await db.collection("items").find().toArray(function (err, documents) {
                     // console.log(documents);
-
                     res.end(JSON.stringify(documents));
-
-
                 });
             } finally {
                 if (db) mongoClientPromise.close();
                 console.log("client.close()");
-
             }
         }
-
     });
 }
 
-// app.post('/geteventbyid',(req,res)=>{
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     let id="";
-//
-//     let body = '';
-//     // req.on('data', chunk => {
-//     //     body += chunk.toString(); // convert Buffer to string
-//     // });
-//     // req.on('end', () => {
-//     //     var post = qs.parse(body);
-//     //
-//     //     console.log(body);
-//     //     id=post.id;
-//     //
-//     //     getEvents(id,res);
-//     // });
-//
-//     var post = req.body;
-//     id=post.id;
-//     getEventById(id,res);
-//
-// });
-//
-// function getEventById(id,res){
-//
-//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-//         if (err){
-//             console.error('An error occurred connecting to MongoDB: ',err);
-//         }else {
-//             const db = client.db(dbName);
-//             var answer = "0";
-//             // var allProductsArray = db.collection("phones").find().toArray();
-//             try {
-//                 let o_id = new mongo.ObjectID(id);
-//
-//                 await db.collection("events").find({ "_id" : o_id }).toArray(function (err, documents) {
-//                     // console.log(documents);
-//
-//                     res.end(JSON.stringify(documents));
-//
-//
-//                 });
-//             } finally {
-//                 if (db) mongoClientPromise.close();
-//                 console.log("client.close()");
-//
-//             }
-//         }
-//
-//     });
-// }
-//
-//
-//
-//
-//
+
+app.get('/getitem',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let id="";
+    console.log('req');
+    console.log(req);
+    getItem(id,res);
+});
+
+function getItem(id,res){
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+                await db.collection("items").find().toArray(function (err, documents) {
+                    // console.log(documents);
+                    res.end(JSON.stringify(documents));
+                });
+            } finally {
+                if (db) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
+    });
+}
+
+
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
 //
