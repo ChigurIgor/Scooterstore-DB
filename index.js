@@ -141,7 +141,7 @@ app.use(bodyParser.json());
 //
 // }
 //
-app.post('/getitems',(req,res)=>{
+app.get('/getitems',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     let id="";
