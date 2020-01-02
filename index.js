@@ -111,169 +111,169 @@ function getItem(id,res){
 //
 //
 //
-// // -------------------------------------------------------- users --------------------------------------------------------------------------
-//
-//
-// app.post('/registration',(req,res)=>{
-//     console.log("We are in registration");
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     res.header('Access-Control-Allow-Headers', "*");
-//     let gender="";
-//     let name="";
-//     let surname="";
-//     let company="";
-//     let street="";
-//     let house="";
-//     let addinfo="";
-//     let postcode="";
-//     let city="";
-//     let country="";
-//     let email="";
-//     let password="";
-//     let phone="";
-//     let addphone="";
-//
-//     let body = '';
-//     // console.log(req);
-//     // console.log(req.toString());
-//     console.log("req.data.body");
-//     console.log(req.body);
-//
-//     // req.on('data', chunk => {
-//     //     body += chunk.toString(); // convert Buffer to string
-//     //     console.log(body);
-//     //     console.log(chunk);
-//     // });
-//     // body= req.body;
-//     // req.on('end', () => {
-//         var post = req.body;
-//         // var post = qs.parse(body);
-//     //     console.log("req.end");
-//     //
-//     //     console.log(body);
-//         gender=post.gender;
-//         name=post.name;
-//         surname=post.surname;
-//         company=post.company;
-//         street=post.street;
-//         house=post.house;
-//         addinfo=post.addinfo;
-//         postcode=post.postcode;
-//         city=post.city;
-//         country=post.country;
-//         email=post.email;
-//         password=post.password;
-//         phone=post.phone;
-//         addphone=post.addphone;
-//
-//         userAdd(gender,name,surname,company,street,house,addinfo,postcode,city,country,email,password,phone,addphone);
-//         res.end(JSON.stringify({ msg: "OK" }));
-//     // });
-// // console.log(req.body.gender);
-//
-// });
-//
-// function userAdd(gender,name,surname,company,street,house,addinfo,postcode,city,country,email,password,phone,addphone) {
-//
-//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-//         const db = client.db(dbName);
-//
-//         const collection = db.collection("users");
-//         let user = {
-//             gender:gender,
-//             name: name,
-//             surname:surname,
-//             company:company,
-//             street:street,
-//             house:house,
-//             addinfo:addinfo,
-//             postcode:postcode,
-//             city:city,
-//             country:country,
-//             email:email,
-//             password:password,
-//             phone:phone,
-//             addphone:addphone};
-//         try {
-//             await collection.insertOne(user, function (err, result) {
-//
-//                 if (err) {
-//                     return console.log(err);
-//                 }
-//                 console.log(result.ops);
-//
-//             });
-//         } finally {
-//             if (db) mongoClientPromise.close();
-//             console.log("client.close()");
-//             res.end(JSON.stringify({ msg: "OK" }));
-//         }
-//     });
-//
-//
-// }
-//
-// app.post('/login',(req,res)=>{
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     let login="";
-//     let password="";
-//
-//     let body = '';
-//
-//     var post = req.body;
-//     console.log(post);
-//     // req.on('data', chunk => {
-//     //     console.log("req.on");
-//     //     body += chunk.toString(); // convert Buffer to string
-//     // });
-//     // req.on('end', () => {
-//     //     console.log("req.end");
-//
-//         // var post = qs.parse(body);
-//
-//         // console.log(body);
-//         login=post.login;
-//         password=post.password;
-//
-//         loginFun(login,password,res);
-//     // });
-//
-// });
-//
-// function loginFun(login,password,res){
-//
-//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-//         if (err){
-//             console.error('An error occurred connecting to MongoDB: ',err);
-//         }else {
-//             const db = client.db(dbName);
-//             var answer = "0";
-//             // var allProductsArray = db.collection("phones").find().toArray();
-//             try {
-//
-//                 console.log(login);
-//                 console.log(password);
-//                 await db.collection("users").find({email: login,password: password}).toArray(function (err, documents) {
-//                     console.log(documents);
-//
-//                     res.end(JSON.stringify(documents));
-//
-//
-//                 });
-//             } finally {
-//                 if (db) mongoClientPromise.close();
-//                 console.log("client.close()");
-//
-//             }
-//         }
-//
-//     });
-// }
-//
-// // -------------------------------------------------------- users --------------------------------------------------------------------------
-//
+// -------------------------------------------------------- users --------------------------------------------------------------------------
+
+
+app.post('/registration',(req,res)=>{
+    console.log("We are in registration");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+    let gender="";
+    let name="";
+    let surname="";
+    let company="";
+    let street="";
+    let house="";
+    let addinfo="";
+    let postcode="";
+    let city="";
+    let country="";
+    let email="";
+    let password="";
+    let phone="";
+    let addphone="";
+
+    let body = '';
+    // console.log(req);
+    // console.log(req.toString());
+    console.log("req.data.body");
+    console.log(req.body);
+
+    // req.on('data', chunk => {
+    //     body += chunk.toString(); // convert Buffer to string
+    //     console.log(body);
+    //     console.log(chunk);
+    // });
+    // body= req.body;
+    // req.on('end', () => {
+        var post = req.body;
+        // var post = qs.parse(body);
+    //     console.log("req.end");
+    //
+    //     console.log(body);
+        gender=post.gender;
+        name=post.name;
+        surname=post.surname;
+        company=post.company;
+        street=post.street;
+        house=post.house;
+        addinfo=post.addinfo;
+        postcode=post.postcode;
+        city=post.city;
+        country=post.country;
+        email=post.email;
+        password=post.password;
+        phone=post.phone;
+        addphone=post.addphone;
+
+        userAdd(gender,name,surname,company,street,house,addinfo,postcode,city,country,email,password,phone,addphone);
+        res.end(JSON.stringify({ msg: "OK" }));
+    // });
+// console.log(req.body.gender);
+
+});
+
+function userAdd(gender,name,surname,company,street,house,addinfo,postcode,city,country,email,password,phone,addphone) {
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+
+        const collection = db.collection("users");
+        let user = {
+            gender:gender,
+            name: name,
+            surname:surname,
+            company:company,
+            street:street,
+            house:house,
+            addinfo:addinfo,
+            postcode:postcode,
+            city:city,
+            country:country,
+            email:email,
+            password:password,
+            phone:phone,
+            addphone:addphone};
+        try {
+            await collection.insertOne(user, function (err, result) {
+
+                if (err) {
+                    return console.log(err);
+                }
+                console.log(result.ops);
+
+            });
+        } finally {
+            if (db) mongoClientPromise.close();
+            console.log("client.close()");
+            res.end(JSON.stringify({ msg: "OK" }));
+        }
+    });
+
+
+}
+
+app.post('/login',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let login="";
+    let password="";
+
+    let body = '';
+
+    var post = req.body;
+    console.log(post);
+    // req.on('data', chunk => {
+    //     console.log("req.on");
+    //     body += chunk.toString(); // convert Buffer to string
+    // });
+    // req.on('end', () => {
+    //     console.log("req.end");
+
+        // var post = qs.parse(body);
+
+        // console.log(body);
+        login=post.login;
+        password=post.password;
+
+        loginFun(login,password,res);
+    // });
+
+});
+
+function loginFun(login,password,res){
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            var answer = "0";
+            // var allProductsArray = db.collection("phones").find().toArray();
+            try {
+
+                console.log(login);
+                console.log(password);
+                await db.collection("users").find({email: login,password: password}).toArray(function (err, documents) {
+                    console.log(documents);
+
+                    res.end(JSON.stringify(documents));
+
+
+                });
+            } finally {
+                if (db) mongoClientPromise.close();
+                console.log("client.close()");
+
+            }
+        }
+
+    });
+}
+
+// -------------------------------------------------------- users --------------------------------------------------------------------------
+
 // // -------------------------------------------------------- orders --------------------------------------------------------------------------
 //
 //
