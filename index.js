@@ -119,20 +119,16 @@ app.post('/registration',(req,res)=>{
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', "*");
-    let gender="";
     let name="";
     let surname="";
-    let company="";
     let street="";
     let house="";
-    let addinfo="";
     let postcode="";
     let city="";
     let country="";
     let email="";
     let password="";
     let phone="";
-    let addphone="";
 
     let body = '';
     // console.log(req);
@@ -152,49 +148,42 @@ app.post('/registration',(req,res)=>{
     //     console.log("req.end");
     //
     //     console.log(body);
-        gender=post.gender;
         name=post.name;
         surname=post.surname;
-        company=post.company;
         street=post.street;
         house=post.house;
-        addinfo=post.addinfo;
         postcode=post.postcode;
         city=post.city;
         country=post.country;
         email=post.email;
         password=post.password;
         phone=post.phone;
-        addphone=post.addphone;
 
-        userAdd(gender,name,surname,company,street,house,addinfo,postcode,city,country,email,password,phone,addphone);
+        userAdd(name,surname,street,house,postcode,city,country,email,password,phone);
         res.end(JSON.stringify({ msg: "OK" }));
     // });
 // console.log(req.body.gender);
 
 });
 
-function userAdd(gender,name,surname,company,street,house,addinfo,postcode,city,country,email,password,phone,addphone) {
+function userAdd(name,surname,street,house,postcode,city,country,email,password,phone) {
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
 
         const collection = db.collection("users");
         let user = {
-            gender:gender,
             name: name,
             surname:surname,
-            company:company,
             street:street,
             house:house,
-            addinfo:addinfo,
             postcode:postcode,
             city:city,
             country:country,
             email:email,
             password:password,
             phone:phone,
-            addphone:addphone};
+        };
         try {
             await collection.insertOne(user, function (err, result) {
 
