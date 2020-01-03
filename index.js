@@ -129,6 +129,7 @@ app.post('/registration',(req,res)=>{
     let email="";
     let password="";
     let phone="";
+    let getnewsagree;
 
     let body = '';
     // console.log(req);
@@ -158,15 +159,16 @@ app.post('/registration',(req,res)=>{
         email=post.email;
         password=post.password;
         phone=post.phone;
+        getnewsagree = post.getnewsagree;
 
-        userAdd(name,surname,street,house,postcode,city,country,email,password,phone);
+        userAdd(name,surname,street,house,postcode,city,country,email,password,phone,getnewsagree);
         res.end(JSON.stringify({ msg: "OK" }));
     // });
 // console.log(req.body.gender);
 
 });
 
-function userAdd(name,surname,street,house,postcode,city,country,email,password,phone) {
+function userAdd(name,surname,street,house,postcode,city,country,email,password,phone,getnewsagree) {
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
@@ -183,6 +185,7 @@ function userAdd(name,surname,street,house,postcode,city,country,email,password,
             email:email,
             password:password,
             phone:phone,
+            getnewsagree:getnewsagree
         };
         try {
             await collection.insertOne(user, function (err, result) {
