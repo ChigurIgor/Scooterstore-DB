@@ -434,14 +434,13 @@ function orderAdd(uid, items,paymentID,paymentCart,paymentTime,paymentEmail,paym
         const collection = db.collection("orders");
         let order = {
             uid:uid,
-            eventId: eventId,
             paymentID:paymentID,
             paymentCart:paymentCart,
             paymentTime:paymentTime,
             paymentEmail:paymentEmail,
             paymentPayerId:paymentPayerId,
             paymentPayerAddress:paymentPayerAddress,
-            places:places,
+            items:items,
             };
         try {
             await collection.insertOne(order, function (err, result) {
