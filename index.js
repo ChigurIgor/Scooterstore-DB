@@ -266,60 +266,59 @@ function loginFun(login,password,res){
 
 // -------------------------------------------------------- users --------------------------------------------------------------------------
 
-// // -------------------------------------------------------- orders --------------------------------------------------------------------------
-//
-//
-//
-// app.post('/orderadd',(req,res)=>{
-//     console.log("We are in orderadd");
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     res.header('Access-Control-Allow-Headers', "*");
-//     let eventId="";
-//     let uid="";
-//     let places=[];
-//     let paymentID="";
-//     let paymentCart="";
-//     let paymentTime="";
-//     let paymentEmail="";
-//     let paymentPayerId="";
-//     let paymentPayerAddress="";
-//
-//     let body = '';
-//     // console.log(req);
-//     // console.log(req.toString());
-//     // console.log("req.data.body");
-//     // console.log(req.body);
-//
-//     // req.on('data', chunk => {
-//     //     body += chunk.toString(); // convert Buffer to string
-//     //     console.log(body);
-//     //     console.log(chunk);
-//     // });
-//     // body= req.body;
-//     // req.on('end', () => {
-//     var post = req.body;
-//     // var post = qs.parse(body);
-//     //     console.log("req.end");
-//     //
-//     //     console.log(body);
-//     eventId=post.id;
-//     uid=post.uid;
-//     places=post.places;
-//     paymentID=post.paymentID;
-//     paymentCart=post.paymentCart;
-//     paymentTime=post.paymentTime;
-//     paymentEmail=post.paymentEmail;
-//     paymentPayerId=post.paymentPayerId;
-//     paymentPayerAddress=post.paymentPayerAddress;
-//
-//     orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
-//     // res.end(JSON.stringify({ msg: "OK" }));
-//     // });
-// // console.log(req.body.gender);
-//
-// });
-//
+// -------------------------------------------------------- orders --------------------------------------------------------------------------
+
+
+
+app.post('/orderadd',(req,res)=>{
+    console.log("We are in orderadd");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+    let uid="";
+    let items=[];
+    let paymentID="";
+    let paymentCart="";
+    let paymentTime="";
+    let paymentEmail="";
+    let paymentPayerId="";
+    let paymentPayerAddress="";
+
+    let body = '';
+    // console.log(req);
+    // console.log(req.toString());
+    // console.log("req.data.body");
+    // console.log(req.body);
+
+    // req.on('data', chunk => {
+    //     body += chunk.toString(); // convert Buffer to string
+    //     console.log(body);
+    //     console.log(chunk);
+    // });
+    // body= req.body;
+    // req.on('end', () => {
+    var post = req.body;
+    // var post = qs.parse(body);
+    //     console.log("req.end");
+    //
+    //     console.log(body);
+    uid=post.uid;
+    items=post.items;
+    paymentID=post.paymentID;
+    paymentCart=post.paymentCart;
+    paymentTime=post.paymentTime;
+    paymentEmail=post.paymentEmail;
+    paymentPayerId=post.paymentPayerId;
+    paymentPayerAddress=post.paymentPayerAddress;
+
+    orderAdd( uid, items,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
+    // orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
+    // res.end(JSON.stringify({ msg: "OK" }));
+    // });
+// console.log(req.body.gender);
+
+});
+
 // function orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res) {
 //
 //     console.log("We are in func orderadd");
@@ -426,44 +425,44 @@ function loginFun(login,password,res){
 //
 //
 //
-// function orderAdd( places, res, uid, eventId,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress){
-//     console.log('orderAdd');
-//
-//     var mongoClientPromise4 = mongoClient.connect(async function (err, client) {
-//         const db = client.db(dbName);
-//
-//         const collection = db.collection("orders");
-//         let order = {
-//             uid:uid,
-//             eventId: eventId,
-//             paymentID:paymentID,
-//             paymentCart:paymentCart,
-//             paymentTime:paymentTime,
-//             paymentEmail:paymentEmail,
-//             paymentPayerId:paymentPayerId,
-//             paymentPayerAddress:paymentPayerAddress,
-//             places:places,
-//             };
-//         try {
-//             await collection.insertOne(order, function (err, result) {
-//
-//                 if (err) {
-//                     return console.log(err);
-//                 }
-//                 res.end(JSON.stringify({ msg: "OK" , orderId: result.ops[0]._id}));
-//
-//             });
-//         } finally {
-//             if (db) mongoClientPromise4.close();
-//             console.log("client.close()");
-//         }
-//     });
-//
-//     // res.end(JSON.stringify({ msg: "OK" }));
-//
-// }
-//
-//
+function orderAdd(uid, items,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
+    console.log('orderAdd');
+
+    var mongoClientPromise4 = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+
+        const collection = db.collection("orders");
+        let order = {
+            uid:uid,
+            eventId: eventId,
+            paymentID:paymentID,
+            paymentCart:paymentCart,
+            paymentTime:paymentTime,
+            paymentEmail:paymentEmail,
+            paymentPayerId:paymentPayerId,
+            paymentPayerAddress:paymentPayerAddress,
+            places:places,
+            };
+        try {
+            await collection.insertOne(order, function (err, result) {
+
+                if (err) {
+                    return console.log(err);
+                }
+                res.end(JSON.stringify({ msg: "OK" , orderId: result.ops[0]._id}));
+
+            });
+        } finally {
+            if (db) mongoClientPromise4.close();
+            console.log("client.close()");
+        }
+    });
+
+    // res.end(JSON.stringify({ msg: "OK" }));
+
+}
+
+
 //
 //
 //   function getOrderById(id, res){
