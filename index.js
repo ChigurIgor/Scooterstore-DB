@@ -277,6 +277,7 @@ app.post('/orderadd',(req,res)=>{
     res.header('Access-Control-Allow-Headers', "*");
     let uid="";
     let items=[];
+    let sum="";
     let paymentID="";
     let paymentCart="";
     let paymentTime="";
@@ -304,6 +305,7 @@ app.post('/orderadd',(req,res)=>{
     //     console.log(body);
     uid=post.uid;
     items=post.items;
+    sum=post.sum;
     paymentID=post.paymentID;
     paymentCart=post.paymentCart;
     paymentTime=post.paymentTime;
@@ -311,7 +313,7 @@ app.post('/orderadd',(req,res)=>{
     paymentPayerId=post.paymentPayerId;
     paymentPayerAddress=post.paymentPayerAddress;
 
-    orderAdd( uid, items,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
+    orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
     // orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
     // res.end(JSON.stringify({ msg: "OK" }));
     // });
@@ -425,7 +427,7 @@ app.post('/orderadd',(req,res)=>{
 //
 //
 //
-function orderAdd(uid, items,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
+function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
 
     var mongoClientPromise4 = mongoClient.connect(async function (err, client) {
@@ -440,6 +442,7 @@ function orderAdd(uid, items,paymentID,paymentCart,paymentTime,paymentEmail,paym
             paymentEmail:paymentEmail,
             paymentPayerId:paymentPayerId,
             paymentPayerAddress:paymentPayerAddress,
+            sum:sum,
             items:items,
             };
         try {
