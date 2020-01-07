@@ -174,6 +174,8 @@ function userAdd(name,surname,street,house,postcode,city,country,email,password,
         const db = client.db(dbName);
 
         const collection = db.collection("users");
+        let cart = [];
+        let orders = [];
         let user = {
             name: name,
             surname:surname,
@@ -181,11 +183,13 @@ function userAdd(name,surname,street,house,postcode,city,country,email,password,
             house:house,
             postcode:postcode,
             city:city,
+            cart: cart,
+            orders: orders,
             country:country,
             email:email,
             password:password,
             phone:phone,
-            getnewsagree:getnewsagree
+            getnewsagree: getnewsagree
         };
         try {
             await collection.insertOne(user, function (err, result) {
@@ -275,15 +279,18 @@ app.post('/orderadd',(req,res)=>{
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', "*");
-    let uid="";
-    let items=[];
-    let sum="";
-    let paymentID="";
-    let paymentCart="";
-    let paymentTime="";
-    let paymentEmail="";
-    let paymentPayerId="";
-    let paymentPayerAddress="";
+
+    let data ={};
+    data.uid="";
+    data.items=[];
+    data.sum="";
+    data.paymentID="";
+    data.paymentCart="";
+    data.paymentTime="";
+    data.paymentEmail="";
+    data.paymentPayerId="";
+    data.paymentPayerAddress="";
+
 
     let body = '';
     // console.log(req);
@@ -303,131 +310,101 @@ app.post('/orderadd',(req,res)=>{
     //     console.log("req.end");
     //
     //     console.log(body);
-    uid=post.uid;
-    items=post.items;
-    sum=post.sum;
-    paymentID=post.paymentID;
-    paymentCart=post.paymentCart;
-    paymentTime=post.paymentTime;
-    paymentEmail=post.paymentEmail;
-    paymentPayerId=post.paymentPayerId;
-    paymentPayerAddress=post.paymentPayerAddress;
 
-    orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
+    data.uid=post.uid;
+    data.items=post.items;
+    data.sum=post.sum;
+    data.paymentID=post.paymentID;
+    data.paymentCart=post.paymentCart;
+    data.paymentTime=post.paymentTime;
+    data.paymentEmail=post.paymentEmail;
+    data.paymentPayerId=post.paymentPayerId;
+    data.paymentPayerAddress=post.paymentPayerAddress;
+
+    // orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
     // orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
     // res.end(JSON.stringify({ msg: "OK" }));
     // });
 // console.log(req.body.gender);
 
+
+
+console.log(data);
+    // orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
+
+const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
+                    .then((data,res)=> { return new Promise((resolve, reject) => orderAddToAccount(data,res, resolve, reject))})
+                    .finally(data=>fourthFunc(data));
+
+
 });
 
-// function orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res) {
-//
-//     console.log("We are in func orderadd");
-//     console.log(paymentID);
-//     console.log(paymentCart);
-//     console.log(paymentTime);
-//     console.log(paymentEmail);
-//     console.log(paymentPayerId);
-//     console.log(paymentPayerAddress);
-//
-//
-//     var mongoClientPromise6 = mongoClient.connect(async function (err, client) {
-//         if (err){
-//             console.error('An error occurred connecting to MongoDB: ',err);
-//         }else {
-//             const db = client.db(dbName);
-//             var answer = "0";
-//             // var allProductsArray = db.collection("phones").find().toArray();
-//             try {
-//                 let o_id = new mongo.ObjectID(eventId);
-//                 console.log('o_id');
-//                 console.log(o_id);
-//
-//                 await db.collection("events").find({ "_id" : o_id }).toArray(function (err, documents) {
-//                     // console.log(documents);
-//
-//                     // res.end(JSON.stringify(documents));
-//                     eventSetSeats(documents, places, res, uid, o_id,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress,eventId);
-//
-//                 });
-//             } finally {
-//                 if (db) mongoClientPromise6.close();
-//                 console.log("client.close()");
-//
-//             }
-//         }
-//
-//     });
-//
-//
-// }
-//
-// function eventSetSeats(documents, places, res, uid, o_id,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress,eventId){
-//     let event=documents[0];
-//     console.log('event seats // uid');
-//     console.log(uid);
-//     // console.log('event.places');
-//     // console.log(event.places);
-//     // console.log('event.places.JSON.PARSE');
-//     // console.log(JSON.parse(event.places));
-//     let eventPlacesOBJ=JSON.parse(event.places);
-//
-//     for(let place of places){
-//         // console.log(place);
-//         for(let eventPlace of eventPlacesOBJ){
-//             // console.log(eventPlace);
-//
-//             if(place.row === eventPlace.row && place.seat === eventPlace.seat){
-//                 if(eventPlace.status==="reserved" && eventPlace.uid==uid[0]) {
-//                     eventPlace.status = 'sold';
-//                     eventPlace.uid = uid[0];
-//                     eventPlace.time = Date.now();
-//                 }
-//                 else {
-//                     res.end(JSON.stringify({ msg: "These places are no longer available" }));
-//                 }
-//             }
-//         }
-//     }
-//
-//     // console.log(eventPlacesOBJ);
-//
-//     let eventPlaces=JSON.stringify(eventPlacesOBJ);
-//
-//
-//
-//
-//     var mongoClientPromise5 = mongoClient.connect(async function (err, client) {
-//         const db = client.db(dbName);
-//         var answer = "0";
-//         // var allProductsArray = db.collection("items").find().toArray();
-//         try {
-//
-//
-//
-//             await db.collection("events").updateOne({"_id" : o_id }, { $set: {places: eventPlaces } }, function(err, documents) {
-//                 if (err) throw err;
-//
-//                 //ToDo   ---------    Add order to the order collection ----
-//                 orderAdd( places, res, uid, eventId,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress);
-//             });
-//         } finally {
-//             if (db) mongoClientPromise5.close();
-//             console.log("client.close()");
-//
-//         }
-//
-//
-//     });
-//
-//                 // res.end(JSON.stringify({ msg: "OK" }));
-//
-// }
-//
-//
-//
-function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
+
+function orderAddToAccount(documents,  res, resolve, reject){
+    let event=documents[0];
+    console.log('event seats // uid');
+    console.log(uid);
+    // console.log('event.places');
+    // console.log(event.places);
+    // console.log('event.places.JSON.PARSE');
+    // console.log(JSON.parse(event.places));
+    let eventPlacesOBJ=JSON.parse(event.places);
+
+    for(let place of places){
+        // console.log(place);
+        for(let eventPlace of eventPlacesOBJ){
+            // console.log(eventPlace);
+
+            if(place.row === eventPlace.row && place.seat === eventPlace.seat){
+                if(eventPlace.status==="reserved" && eventPlace.uid==uid[0]) {
+                    eventPlace.status = 'sold';
+                    eventPlace.uid = uid[0];
+                    eventPlace.time = Date.now();
+                }
+                else {
+                    res.end(JSON.stringify({ msg: "These places are no longer available" }));
+                }
+            }
+        }
+    }
+
+    // console.log(eventPlacesOBJ);
+
+    let eventPlaces=JSON.stringify(eventPlacesOBJ);
+
+
+
+
+    var mongoClientPromise5 = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+
+
+
+            await db.collection("events").updateOne({"_id" : o_id }, { $set: {places: eventPlaces } }, function(err, documents) {
+                if (err) throw err;
+
+                //ToDo   ---------    Add order to the order collection ----
+                orderAdd( places, res, uid, eventId,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress);
+            });
+        } finally {
+            if (db) mongoClientPromise5.close();
+            console.log("client.close()");
+
+        }
+
+
+    });
+
+                // res.end(JSON.stringify({ msg: "OK" }));
+
+}
+
+
+function orderAdd(data, res){
+// function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
 
     var mongoClientPromise4 = mongoClient.connect(async function (err, client) {
@@ -463,6 +440,10 @@ function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,
     // res.end(JSON.stringify({ msg: "OK" }));
 
 }
+
+
+
+
 
 
 //
