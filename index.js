@@ -334,7 +334,7 @@ console.log(data);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
                     .then((data,res)=> { return new Promise((resolve, reject) => orderAddToAccount(data,res, resolve, reject))})
-                    .finally(data=>okFunction(data,res));
+                    .finally((data,res)=>okFunction(data,res));
 
 
 });
@@ -344,12 +344,12 @@ function orderAdd(data, res, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
 
-    var mongoClientPromise4 = mongoClient.connect(async function (err, client) {
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
 
         const collection = db.collection("orders");
         let order = {
-            uid:data.uid,
+            uid:data.uid[0],
             paymentID:data.paymentID,
             paymentCart:data.paymentCart,
             paymentTime:data.paymentTime,
@@ -371,7 +371,7 @@ function orderAdd(data, res, resolve, reject){
 
             });
         } finally {
-            if (mongoClientPromise4) mongoClientPromise4.close();
+            if (mongoClientPromise) mongoClientPromise.close();
             console.log("client.close()");
         }
     });
@@ -380,11 +380,14 @@ function orderAdd(data, res, resolve, reject){
 }
 
 function orderAddToAccount(data,  res, resolve, reject){
-    let orderId=data.orderId;
+    let orderId = data.orderId;
+    let uid = data.uid;
     console.log('uid');
-    console.log(data.uid);
+    console.log(uid);
     console.log('orderId');
     console.log(orderId);
+    console.log('data');
+    console.log(data);
 
         resolve({ msg: "OK" },res);
 
