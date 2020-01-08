@@ -366,7 +366,7 @@ function orderAdd(data, res, resolve, reject){
                     return console.log(err);
                     //todo -- add reject
                 }
-                resolve.end({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid});
+                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid});
 
             });
         } finally {
