@@ -349,15 +349,15 @@ function orderAdd(data, res, resolve, reject){
 
         const collection = db.collection("orders");
         let order = {
-            uid:uid,
+            uid:data.uid,
             paymentID:paymentID,
             paymentCart:paymentCart,
             paymentTime:paymentTime,
             paymentEmail:paymentEmail,
             paymentPayerId:paymentPayerId,
             paymentPayerAddress:paymentPayerAddress,
-            sum:sum,
-            items:items,
+            sum:data.sum,
+            items:data.items,
             };
         try {
             await collection.insertOne(order, function (err, result) {
@@ -366,7 +366,7 @@ function orderAdd(data, res, resolve, reject){
                     return console.log(err);
                     //todo -- add reject
                 }
-                resolve.end({ msg: "OK" , orderId: result.ops[0]._id, uid: this.uid});
+                resolve.end({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid});
 
             });
         } finally {
