@@ -350,12 +350,12 @@ function orderAdd(data, res, resolve, reject){
         const collection = db.collection("orders");
         let order = {
             uid:data.uid,
-            paymentID:paymentID,
-            paymentCart:paymentCart,
-            paymentTime:paymentTime,
-            paymentEmail:paymentEmail,
-            paymentPayerId:paymentPayerId,
-            paymentPayerAddress:paymentPayerAddress,
+            paymentID:data.paymentID,
+            paymentCart:data.paymentCart,
+            paymentTime:data.paymentTime,
+            paymentEmail:data.paymentEmail,
+            paymentPayerId:data.paymentPayerId,
+            paymentPayerAddress:data.paymentPayerAddress,
             sum:data.sum,
             items:data.items,
             };
