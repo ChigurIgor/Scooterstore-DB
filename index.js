@@ -394,8 +394,9 @@ function orderAddToAccount(data, resolve, reject){
     // console.log('res');
     // console.log(res);
     // res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
+    resolve({ msg: "OK" ,res: res});
 
-    resolve(data);
+    // resolve(data);
 
 }
 
@@ -764,16 +765,16 @@ function orderAddToAccount(data, resolve, reject){
 
 function okFunction(data,resolve,reject) {
     console.log('okFunction()');
-    console.log('data');
-    console.log(data);
+    // console.log('data');
+    // console.log(data);
 
     let res = data.res;
-    console.log('res');
-    console.log(res);
+    // console.log('res');
+    // console.log(res);
 
-    if(data){
-        res.end(JSON.stringify(data));
-    }else {
+    if(data.msg){
+        res.end(JSON.stringify({ msg: "OK" }));
+    }else{
         res.end(JSON.stringify({ msg: "Error occurred" }));
     }
 
