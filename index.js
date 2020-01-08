@@ -340,7 +340,7 @@ const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, re
 });
 
 
-function orderAdd(data, resolve, reject){
+function orderAdd(data,res, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
     console.log('res');
@@ -398,9 +398,6 @@ function orderAddToAccount(data, resolve, reject){
     // resolve(data,res);
 
 }
-
-
-
 
 
 //
