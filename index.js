@@ -311,7 +311,7 @@ app.post('/orderadd',(req,res)=>{
     //
     //     console.log(body);
 
-    data.uid=post.uid;
+    data.uid=post.uid[0];
     data.items=post.items;
     data.sum=post.sum;
     data.paymentID=post.paymentID;
@@ -349,7 +349,7 @@ function orderAdd(data, res, resolve, reject){
 
         const collection = db.collection("orders");
         let order = {
-            uid:data.uid[0],
+            uid:data,
             paymentID:data.paymentID,
             paymentCart:data.paymentCart,
             paymentTime:data.paymentTime,
