@@ -334,76 +334,13 @@ console.log(data);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
                     .then((data,res)=> { return new Promise((resolve, reject) => orderAddToAccount(data,res, resolve, reject))})
-                    .finally(data=>fourthFunc(data));
+                    .finally(data=>okFunction(data,res));
 
 
 });
 
 
-function orderAddToAccount(documents,  res, resolve, reject){
-    let event=documents[0];
-    console.log('event seats // uid');
-    console.log(uid);
-    // console.log('event.places');
-    // console.log(event.places);
-    // console.log('event.places.JSON.PARSE');
-    // console.log(JSON.parse(event.places));
-    let eventPlacesOBJ=JSON.parse(event.places);
-
-    for(let place of places){
-        // console.log(place);
-        for(let eventPlace of eventPlacesOBJ){
-            // console.log(eventPlace);
-
-            if(place.row === eventPlace.row && place.seat === eventPlace.seat){
-                if(eventPlace.status==="reserved" && eventPlace.uid==uid[0]) {
-                    eventPlace.status = 'sold';
-                    eventPlace.uid = uid[0];
-                    eventPlace.time = Date.now();
-                }
-                else {
-                    res.end(JSON.stringify({ msg: "These places are no longer available" }));
-                }
-            }
-        }
-    }
-
-    // console.log(eventPlacesOBJ);
-
-    let eventPlaces=JSON.stringify(eventPlacesOBJ);
-
-
-
-
-    var mongoClientPromise5 = mongoClient.connect(async function (err, client) {
-        const db = client.db(dbName);
-        var answer = "0";
-        // var allProductsArray = db.collection("items").find().toArray();
-        try {
-
-
-
-            await db.collection("events").updateOne({"_id" : o_id }, { $set: {places: eventPlaces } }, function(err, documents) {
-                if (err) throw err;
-
-                //ToDo   ---------    Add order to the order collection ----
-                orderAdd( places, res, uid, eventId,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress);
-            });
-        } finally {
-            if (db) mongoClientPromise5.close();
-            console.log("client.close()");
-
-        }
-
-
-    });
-
-                // res.end(JSON.stringify({ msg: "OK" }));
-
-}
-
-
-function orderAdd(data, res){
+function orderAdd(data, res, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
 
@@ -427,8 +364,9 @@ function orderAdd(data, res){
 
                 if (err) {
                     return console.log(err);
+                    //todo -- add reject
                 }
-                res.end(JSON.stringify({ msg: "OK" , orderId: result.ops[0]._id}));
+                resolve.end({ msg: "OK" , orderId: result.ops[0]._id, uid: this.uid});
 
             });
         } finally {
@@ -437,10 +375,19 @@ function orderAdd(data, res){
         }
     });
 
-    // res.end(JSON.stringify({ msg: "OK" }));
 
 }
 
+function orderAddToAccount(data,  res, resolve, reject){
+    let orderId=data.orderId;
+    console.log('uid');
+    console.log(uid);
+    console.log('orderId');
+    console.log(orderId);
+
+        resolve({ msg: "OK" },res);
+
+}
 
 
 
@@ -808,3 +755,8 @@ function orderAdd(data, res){
 
 
 
+function okFunction(data,res) {
+    console.log('okFunction()');
+    console.log(data);
+    res.JSON.stringify(data);
+}
