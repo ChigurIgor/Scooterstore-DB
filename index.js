@@ -334,7 +334,7 @@ console.log(data);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
-                    .finally((data,res)=>okFunction(data,res));
+                    .finally((data)=>okFunction(data));
 
 
 });
@@ -393,9 +393,9 @@ function orderAddToAccount(data, resolve, reject){
     console.log(data);
     console.log('res');
     console.log(res);
-    res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
+    // res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
 
-    // resolve(data,res);
+    resolve(data);
 
 }
 
@@ -762,12 +762,14 @@ function orderAddToAccount(data, resolve, reject){
 
 
 
-function okFunction(data,res) {
+function okFunction(data) {
     console.log('okFunction()');
+    let res = data.res;
     console.log('data');
     console.log(data);
     console.log('res');
     console.log(res);
+
     if(data){
         res.end(JSON.stringify(data));
     }else {
