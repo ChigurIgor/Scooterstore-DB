@@ -367,7 +367,7 @@ function orderAdd(data, res, resolve, reject){
                     //todo -- add reject
                 }
 
-                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid});
+                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid},res);
 
             });
         } finally {
@@ -379,7 +379,7 @@ function orderAdd(data, res, resolve, reject){
 
 }
 
-function orderAddToAccount(data,  res, resolve, reject){
+function orderAddToAccount(data, res, resolve, reject){
     let orderId = data.orderId;
     let uid = data.uid;
     console.log('uid');
@@ -388,7 +388,8 @@ function orderAddToAccount(data,  res, resolve, reject){
     console.log(orderId);
     console.log('data');
     console.log(data);
-
+    console.log('res');
+    console.log(res);
         resolve({ msg: "OK" },res);
 
 }
@@ -761,7 +762,10 @@ function orderAddToAccount(data,  res, resolve, reject){
 
 function okFunction(data,res) {
     console.log('okFunction()');
+    console.log('data');
     console.log(data);
+    console.log('res');
+    console.log(res);
     if(data){
         res.end(JSON.stringify(data));
     }else {
