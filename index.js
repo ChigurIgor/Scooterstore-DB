@@ -366,12 +366,14 @@ function orderAdd(data, res, resolve, reject){
                     return console.log(err);
                     //todo -- add reject
                 }
+                if (db) mongoClientPromise4.close();
+                console.log("client.close()");
                 resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid});
 
             });
         } finally {
-            if (db) mongoClientPromise4.close();
-            console.log("client.close()");
+            // if (db) mongoClientPromise4.close();
+            // console.log("client.close()");
         }
     });
 
@@ -381,7 +383,7 @@ function orderAdd(data, res, resolve, reject){
 function orderAddToAccount(data,  res, resolve, reject){
     let orderId=data.orderId;
     console.log('uid');
-    console.log(uid);
+    console.log(data.uid);
     console.log('orderId');
     console.log(orderId);
 
@@ -758,5 +760,9 @@ function orderAddToAccount(data,  res, resolve, reject){
 function okFunction(data,res) {
     console.log('okFunction()');
     console.log(data);
-    res.JSON.stringify(data);
+    if(data){
+        res.end(JSON.stringify(data));
+    }else {
+        res.end(JSON.stringify({ msg: "Error occurred" }));
+    }
 }
