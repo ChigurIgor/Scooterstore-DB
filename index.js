@@ -341,10 +341,9 @@ const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, re
 });
 
 
-function orderAdd(data,res, resolve, reject){
+function orderAdd(data, res, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
-    console.log('res');
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
@@ -392,8 +391,8 @@ function orderAddToAccount(data, resolve, reject){
     console.log(orderId);
     // console.log('data');
     // console.log(data);
-    console.log('res');
-    console.log(res);
+    // console.log('res');
+    // console.log(res);
     // res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
 
     resolve(data);
@@ -778,5 +777,5 @@ function okFunction(data,resolve,reject) {
         res.end(JSON.stringify({ msg: "Error occurred" }));
     }
 
-    resolve();
+    // resolve();
 }
