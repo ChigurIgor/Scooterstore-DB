@@ -778,5 +778,5 @@ function okFunction(data,resolve,reject) {
         res.end(JSON.stringify({ msg: "Error occurred" }));
     }
 
-    // resolve();
+    resolve();
 }
