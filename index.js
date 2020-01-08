@@ -366,14 +366,13 @@ function orderAdd(data, res, resolve, reject){
                     return console.log(err);
                     //todo -- add reject
                 }
-                if (db) mongoClientPromise4.close();
-                console.log("client.close()");
+
                 resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid});
 
             });
         } finally {
-            // if (db) mongoClientPromise4.close();
-            // console.log("client.close()");
+            if (mongoClientPromise4) mongoClientPromise4.close();
+            console.log("client.close()");
         }
     });
 
