@@ -344,7 +344,6 @@ function orderAdd(data, res, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
     console.log('res');
-    res.end(JSON.stringify({ msg: "res orderAdd works" }));
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
@@ -369,7 +368,8 @@ function orderAdd(data, res, resolve, reject){
                     //todo -- add reject
                 }
 
-                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid,res: res});
+                // resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid,res: res});
+                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid}, res);
 
             });
         } finally {
@@ -392,7 +392,9 @@ function orderAddToAccount(data, res, resolve, reject){
     console.log(data);
     console.log('res');
     console.log(res);
-        resolve(data,res);
+    res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
+
+    resolve(data,res);
 
 }
 
