@@ -334,7 +334,8 @@ console.log(data);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
-                    .finally((data)=>okFunction(data));
+                    .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
+                    // .then((data)=>okFunction(data));
 
 
 });
@@ -762,11 +763,12 @@ function orderAddToAccount(data, resolve, reject){
 
 
 
-function okFunction(data) {
+function okFunction(data,resolve,reject) {
     console.log('okFunction()');
-    let res = data.res;
     console.log('data');
     console.log(data);
+
+    let res = data.res;
     console.log('res');
     console.log(res);
 
@@ -775,4 +777,6 @@ function okFunction(data) {
     }else {
         res.end(JSON.stringify({ msg: "Error occurred" }));
     }
+
+    resolve();
 }
