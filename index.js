@@ -333,14 +333,14 @@ console.log(data);
     // orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
-                    .then((data,res)=> { return new Promise((resolve, reject) => orderAddToAccount(data,res, resolve, reject))})
+                    .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
                     .finally((data,res)=>okFunction(data,res));
 
 
 });
 
 
-function orderAdd(data, res, resolve, reject){
+function orderAdd(data, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
     console.log('orderAdd');
     console.log('res');
@@ -368,8 +368,8 @@ function orderAdd(data, res, resolve, reject){
                     //todo -- add reject
                 }
 
-                // resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid,res: res});
-                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid}, res);
+                resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid,res: res});
+                // resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid}, res);
 
             });
         } finally {
@@ -381,9 +381,10 @@ function orderAdd(data, res, resolve, reject){
 
 }
 
-function orderAddToAccount(data, res, resolve, reject){
+function orderAddToAccount(data, resolve, reject){
     let orderId = data.orderId;
     let uid = data.uid;
+    let res = data.res;
     console.log('uid');
     console.log(uid);
     console.log('orderId');
@@ -394,7 +395,7 @@ function orderAddToAccount(data, res, resolve, reject){
     console.log(res);
     res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
 
-    resolve(data,res);
+    // resolve(data,res);
 
 }
 
