@@ -389,8 +389,8 @@ function orderAddToAccount(data, resolve, reject){
     console.log(uid);
     console.log('orderId');
     console.log(orderId);
-    console.log('data');
-    console.log(data);
+    // console.log('data');
+    // console.log(data);
     console.log('res');
     console.log(res);
     // res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
