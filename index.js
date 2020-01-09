@@ -287,7 +287,7 @@ function getUserById(data, resolve, reject){
 
                         console.log('getUserById');
                         console.log(documents);
-                        data.documents = documents;
+                        data.user = documents[0];
                         resolve(data);
 
 
@@ -422,16 +422,45 @@ function orderAddToAccount(data, resolve, reject){
     let uid = data.uid;
     let res = data.res;
     let user = data.user;
+    let orders=user.orders;
     console.log('uid');
     console.log(uid);
     console.log('orderId');
     console.log(orderId);
-    // console.log('data');
-    // console.log(data);
-    // console.log('res');
-    // console.log(res);
-    // res.end(JSON.stringify({ msg: "res orderAddToAccount works" }));
-    resolve({ msg: "OK" ,res: res});
+    console.log('user');
+    console.log(user);
+    orders.push(orderId);
+
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+
+            let o_id = new mongo.ObjectID(uid);
+                await db.collection("users").updateOne({"_id" : o_id }, { $set: {orders: orders } }, function(err, documents) {
+                    if (err) throw err;
+                    resolve({ msg: "OK" ,res: res});
+                });
+            } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+            }
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
 
     // resolve(data);
 
