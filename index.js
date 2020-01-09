@@ -928,7 +928,7 @@ function okFunction(data,resolve,reject) {
             res.end(JSON.stringify({ msg: "OK" }));
         }
         else {
-            res.end(JSON.stringify(data));
+            res.end(data);
 
         }
     }
