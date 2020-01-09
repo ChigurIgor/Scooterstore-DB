@@ -310,7 +310,7 @@ function getUserById(data, resolve, reject){
 
 
 
-app.post('/orderadd',(req,res)=>{
+app.post('/order_add',(req,res)=>{
     console.log("We are in orderadd");
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -357,25 +357,126 @@ app.post('/orderadd',(req,res)=>{
     data.paymentPayerId=post.paymentPayerId;
     data.paymentPayerAddress=post.paymentPayerAddress;
 
-    // orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
-    // orderAddStart(eventId, uid, places,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
-    // res.end(JSON.stringify({ msg: "OK" }));
-    // });
-// console.log(req.body.gender);
-
-
-
 console.log(data);
-    // orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
                     .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
-                    // .then((data)=>okFunction(data));
 });
 
+// app.post('/orders_get_from_user',(req,res)=>{
+//     console.log("We are in orderadd");
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.header('Access-Control-Allow-Headers', "*");
+//
+//     let data ={};
+//     data.uid="";
+//     data.items=[];
+//     data.sum="";
+//     data.paymentID="";
+//     data.paymentCart="";
+//     data.paymentTime="";
+//     data.paymentEmail="";
+//     data.paymentPayerId="";
+//     data.paymentPayerAddress="";
+//
+//
+//     let body = '';
+//     // console.log(req);
+//     // console.log(req.toString());
+//     // console.log("req.data.body");
+//     // console.log(req.body);
+//
+//     // req.on('data', chunk => {
+//     //     body += chunk.toString(); // convert Buffer to string
+//     //     console.log(body);
+//     //     console.log(chunk);
+//     // });
+//     // body= req.body;
+//     // req.on('end', () => {
+//     var post = req.body;
+//     // var post = qs.parse(body);
+//     //     console.log("req.end");
+//     //
+//     //     console.log(body);
+//
+//     data.uid=post.uid[0];
+//     data.items=post.items;
+//     data.sum=post.sum;
+//     data.paymentID=post.paymentID;
+//     data.paymentCart=post.paymentCart;
+//     data.paymentTime=post.paymentTime;
+//     data.paymentEmail=post.paymentEmail;
+//     data.paymentPayerId=post.paymentPayerId;
+//     data.paymentPayerAddress=post.paymentPayerAddress;
+//
+//     console.log(data);
+//
+//     const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
+//         .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
+//         .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
+//         .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
+//         .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
+// });
+
+// app.post('/order_get_by_id',(req,res)=>{
+//     console.log("We are in orderadd");
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.header('Access-Control-Allow-Headers', "*");
+//
+//     let data ={};
+//     data.uid="";
+//     data.items=[];
+//     data.sum="";
+//     data.paymentID="";
+//     data.paymentCart="";
+//     data.paymentTime="";
+//     data.paymentEmail="";
+//     data.paymentPayerId="";
+//     data.paymentPayerAddress="";
+//
+//
+//     let body = '';
+//     // console.log(req);
+//     // console.log(req.toString());
+//     // console.log("req.data.body");
+//     // console.log(req.body);
+//
+//     // req.on('data', chunk => {
+//     //     body += chunk.toString(); // convert Buffer to string
+//     //     console.log(body);
+//     //     console.log(chunk);
+//     // });
+//     // body= req.body;
+//     // req.on('end', () => {
+//     var post = req.body;
+//     // var post = qs.parse(body);
+//     //     console.log("req.end");
+//     //
+//     //     console.log(body);
+//
+//     data.uid=post.uid[0];
+//     data.items=post.items;
+//     data.sum=post.sum;
+//     data.paymentID=post.paymentID;
+//     data.paymentCart=post.paymentCart;
+//     data.paymentTime=post.paymentTime;
+//     data.paymentEmail=post.paymentEmail;
+//     data.paymentPayerId=post.paymentPayerId;
+//     data.paymentPayerAddress=post.paymentPayerAddress;
+//
+//     console.log(data);
+//
+//     const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
+//         .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
+//         .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
+//         .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
+//         .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
+// });
 
 function orderAdd(data, res, resolve, reject){
 // function orderAdd(uid, items,sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res){
@@ -447,36 +548,36 @@ function orderAddToAccount(data, resolve, reject){
 
 
 
-//   function getOrderById(id, res){
-//
-//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-//         if (err){
-//             console.error('An error occurred connecting to MongoDB: ',err);
-//         }else {
-//             const db = client.db(dbName);
-//             var answer = "0";
-//             // var allProductsArray = db.collection("phones").find().toArray();
-//             try {
-//                 let o_id = new mongo.ObjectID(id);
-//
-//                 await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-//
-//
-//                     sendPDF(documents,res);
-//
-//
-//
-//
-//                 });
-//             } finally {
-//                 if (db) mongoClientPromise.close();
-//                 console.log("client.close()");
-//
-//             }
-//         }
-//
-//     });
-// }
+  function getOrderById(id, res){
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            var answer = "0";
+            // var allProductsArray = db.collection("phones").find().toArray();
+            try {
+                let o_id = new mongo.ObjectID(id);
+
+                await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
+
+
+                    sendPDF(documents,res);
+
+
+
+
+                });
+            } finally {
+                if (db) mongoClientPromise.close();
+                console.log("client.close()");
+
+            }
+        }
+
+    });
+}
 
 // // -------------------------------------------------------- orders --------------------------------------------------------------------------
 
