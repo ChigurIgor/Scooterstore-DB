@@ -268,6 +268,42 @@ function loginFun(login,password,res){
     });
 }
 
+function getUserById(data, resolve, reject){
+    let uid = data.uid;
+    let res = data.res;
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            var answer = "0";
+            // var allProductsArray = db.collection("phones").find().toArray();
+            try {
+                let o_id = new mongo.ObjectID(uid);
+
+                await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
+
+
+                        console.log('getUserById');
+                        console.log(documents);
+                        data.documents = documents;
+                        resolve(data);
+
+
+
+                });
+            } finally {
+                if (db) mongoClientPromise.close();
+                console.log("client.close()");
+
+            }
+        }
+
+    });
+}
+
+
 // -------------------------------------------------------- users --------------------------------------------------------------------------
 
 // -------------------------------------------------------- orders --------------------------------------------------------------------------
@@ -333,11 +369,10 @@ console.log(data);
     // orderAdd( uid, items, sum,paymentID,paymentCart,paymentTime,paymentEmail,paymentPayerId,paymentPayerAddress, res);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
+                    .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
                     // .then((data)=>okFunction(data));
-
-
 });
 
 
@@ -382,9 +417,11 @@ function orderAdd(data, res, resolve, reject){
 }
 
 function orderAddToAccount(data, resolve, reject){
+    console.log('orderAddToAccount');
     let orderId = data.orderId;
     let uid = data.uid;
     let res = data.res;
+    let user = data.user;
     console.log('uid');
     console.log(uid);
     console.log('orderId');
@@ -401,8 +438,8 @@ function orderAddToAccount(data, resolve, reject){
 }
 
 
-//
-//
+
+
 //   function getOrderById(id, res){
 //
 //     var mongoClientPromise = mongoClient.connect(async function (err, client) {
@@ -433,16 +470,7 @@ function orderAddToAccount(data, resolve, reject){
 //
 //     });
 // }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 // // -------------------------------------------------------- orders --------------------------------------------------------------------------
 //
 //
