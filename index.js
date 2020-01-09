@@ -916,19 +916,20 @@ function setCart(data, resolve, reject){
 
 function okFunction(data,resolve,reject) {
     console.log('okFunction()');
-    // console.log('data');
-    // console.log(data);
+    console.log('data');
+    console.log(data);
 
     let res = data.res;
     // console.log('res');
     // console.log(res);
+    data.res = '';
 
     if (data){
         if(data.msg){
             res.end(JSON.stringify({ msg: "OK" }));
         }
         else {
-            res.end(data);
+            res.end(JSON.stringify(data));
 
         }
     }
