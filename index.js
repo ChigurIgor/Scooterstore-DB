@@ -920,7 +920,7 @@ function sendAnswer(data,resolve,reject) {
     let res = data.res;
     // console.log('res');
     // console.log(res);
-    data.res = '';
+    delete data.res;
 
     if (data){
         if(data.msg){
