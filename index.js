@@ -364,7 +364,7 @@ const promise = new Promise((resolve, reject) => orderAdd(data, resolve, reject)
                     .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
-                    .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
+                    .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
 app.post('/orders_get_from_user',(req,res)=>{
@@ -385,7 +385,7 @@ app.post('/orders_get_from_user',(req,res)=>{
 
     const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => ordersGetFromAccount(data, resolve, reject))})
-        .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
     });
 
 
@@ -548,11 +548,10 @@ function orderAddToAccount(data, resolve, reject){
 }
   function ordersGetFromAccount(data, resolve, reject){
 
-    let orders = [];
-    let user = data.user;
-    orders = user.orders || [];
+      let orders = data.user.orders || [];
 
-    data.orders = orders;
+    data2.orders = orders;
+    data2.res = data.res;
     resolve(data);
 
 }
@@ -914,8 +913,8 @@ function setCart(data, resolve, reject){
 
 
 
-function okFunction(data,resolve,reject) {
-    console.log('okFunction()');
+function sendAnswer(data,resolve,reject) {
+    console.log('sendAnswer()');
     console.log('data');
     console.log(data);
 
