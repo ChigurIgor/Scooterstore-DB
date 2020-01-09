@@ -551,7 +551,7 @@ function orderAddToAccount(data, resolve, reject){
       let data2 = {};
     data2.orders = data.user.orders || [];
     data2.res = data.res;
-    resolve(data);
+    resolve(data2);
 
 }
 
