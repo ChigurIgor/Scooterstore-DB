@@ -371,6 +371,7 @@ console.log(data);
 const promise = new Promise((resolve, reject) => orderAdd(data, res, resolve, reject))
                     .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
+                    .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => okFunction(data, resolve, reject))})
                     // .then((data)=>okFunction(data));
 });
@@ -422,7 +423,7 @@ function orderAddToAccount(data, resolve, reject){
     let uid = data.uid;
     let res = data.res;
     let user = data.user;
-    let orders=user.orders;
+    let orders = user.orders;
     console.log('uid');
     console.log(uid);
     console.log('orderId');
@@ -441,7 +442,8 @@ function orderAddToAccount(data, resolve, reject){
             let o_id = new mongo.ObjectID(uid);
                 await db.collection("users").updateOne({"_id" : o_id }, { $set: {orders: orders } }, function(err, documents) {
                     if (err) throw err;
-                    resolve({ msg: "OK" ,res: res});
+                    data.cart = [];
+                    resolve(data);
                 });
             } finally {
             if (mongoClientPromise) mongoClientPromise.close();
@@ -450,19 +452,6 @@ function orderAddToAccount(data, resolve, reject){
 
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
-    // resolve(data);
 
 }
 
@@ -501,9 +490,48 @@ function orderAddToAccount(data, resolve, reject){
 // }
 
 // // -------------------------------------------------------- orders --------------------------------------------------------------------------
-//
-//
-//
+
+
+// // -------------------------------------------------------- cart --------------------------------------------------------------------------
+function setCart(data, resolve, reject){
+    console.log('orderAddToAccount');
+    let uid = data.uid;
+    let res = data.res;
+    let cart = data.cart;
+    console.log('uid');
+    console.log(uid);
+    console.log('user');
+    console.log(user);
+
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+
+            let o_id = new mongo.ObjectID(uid);
+            await db.collection("users").updateOne({"_id" : o_id }, { $set: {cart: cart } }, function(err, documents) {
+                if (err) throw err;
+                resolve({ msg: "OK" ,res: res});
+            });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+
+
+    });
+
+}
+
+
+
+// // -------------------------------------------------------- cart --------------------------------------------------------------------------
+
+
+
+
 // // -------------------------------------------------------- reserve ------------------------------------------------------------------------
 //
 // app.post('/reserveadd',(req,res)=>{
