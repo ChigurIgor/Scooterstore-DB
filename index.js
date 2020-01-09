@@ -424,33 +424,22 @@ function orderAddToAccount(data, resolve, reject){
     let res = data.res;
     let user = data.user;
     let orders = user.orders;
-    console.log('uid');
-    console.log(uid);
-    console.log('orderId');
-    console.log(orderId);
-    console.log('user');
-    console.log(user);
     orders.push(orderId);
-
-
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
         var answer = "0";
         // var allProductsArray = db.collection("items").find().toArray();
         try {
-
             let o_id = new mongo.ObjectID(uid);
                 await db.collection("users").updateOne({"_id" : o_id }, { $set: {orders: orders } }, function(err, documents) {
                     if (err) throw err;
                     data.cart = [];
                     resolve(data);
                 });
-            } finally {
+        } finally {
             if (mongoClientPromise) mongoClientPromise.close();
             console.log("client.close()");
-            }
-
-
+        }
     });
 
 }
@@ -494,14 +483,12 @@ function orderAddToAccount(data, resolve, reject){
 
 // // -------------------------------------------------------- cart --------------------------------------------------------------------------
 function setCart(data, resolve, reject){
-    console.log('orderAddToAccount');
+    console.log('setCart');
     let uid = data.uid;
     let res = data.res;
     let cart = data.cart;
-    console.log('uid');
-    console.log(uid);
-    console.log('user');
-    console.log(user);
+
+
 
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
