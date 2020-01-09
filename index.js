@@ -548,9 +548,8 @@ function orderAddToAccount(data, resolve, reject){
 }
   function ordersGetFromAccount(data, resolve, reject){
 
-      let orders = data.user.orders || [];
-
-    data2.orders = orders;
+      let data2 = {};
+    data2.orders = data.user.orders || [];
     data2.res = data.res;
     resolve(data);
 
