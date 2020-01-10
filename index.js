@@ -453,10 +453,9 @@ function orderAdd(data, resolve, reject){
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
-
         const collection = db.collection("orders");
         let order = {
-            uid:data,
+            uid:data.uid,
             paymentID:data.paymentID,
             paymentCart:data.paymentCart,
             paymentTime:data.paymentTime,
@@ -468,23 +467,18 @@ function orderAdd(data, resolve, reject){
             };
         try {
             await collection.insertOne(order, function (err, result) {
-
                 if (err) {
                     return console.log(err);
                     //todo -- add reject
                 }
-
                 resolve({orderId: result.ops[0]._id, uid: data.uid,res: res});
                 // resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid}, res);
-
             });
         } finally {
             if (mongoClientPromise) mongoClientPromise.close();
             console.log("client.close()");
         }
     });
-
-
 }
 
 function orderAddToAccount(data, resolve, reject){
@@ -542,39 +536,24 @@ console.log('orderGetById');
     });
 }
   function ordersGetFromAccount(data, resolve, reject){
-
-      let data2 = {};
+    let data2 = {};
     data2.orders = data.user.orders || [];
     data2.res = data.res;
     resolve(data2);
-
 }
 
 
 function ordersGetByList(data, resolve, reject){
-
-let orders = [];
+    let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
                 try {
                 await db.collection("orders").find().toArray(function (err, documents) {
                     orders = documents;
-                    console.log("orders");
-                    console.log(orders);
                     let ordersMaped = [];
                     for(let orderId of data.orders){
                         let o_id = new mongo.ObjectID(orderId);
-                        console.log('o_id');
-                        console.log(o_id);
-                        console.log('orderId');
-                        console.log(orderId);
-                        for(let order of orders){
-                            console.log('order from base');
-                            console.log(order._id);
-                            console.log(order._id.equals(orderId) );
-
-                        }
-                        let orderObj = orders.find(x => x._id.equals(orderId));
+                             let orderObj = orders.find(x => x._id.equals(orderId));
                         console.log(orderObj);
                         ordersMaped.push(orderObj);
                     }
@@ -584,13 +563,7 @@ let orders = [];
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
-
             }
-
-
-
-
-
     });
 }
 
