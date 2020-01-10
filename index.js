@@ -560,9 +560,7 @@ function ordersGetByList(data, resolve, reject){
 
 let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
-        const db = client.db("printsotre");
-        var answer = "0";
-        // var allProductsArray = db.collection("items").find().toArray();
+        const db = client.db(dbName);
         try {
             for (let order of data.orders){
                 let o_id = new mongo.ObjectID(order);
