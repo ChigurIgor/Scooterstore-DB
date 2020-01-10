@@ -368,7 +368,7 @@ const promise = new Promise((resolve, reject) => orderAdd(data, resolve, reject)
 });
 
 app.post('/orders_get_from_user',(req,res)=>{
-    console.log("We are in orderadd");
+    console.log("We are in orders_get_from_user");
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', "*");
@@ -555,21 +555,30 @@ function ordersGetByList(data, resolve, reject){
 let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
-
-        for await (let order of data.orders){
-            try {
-                    let o_id = new mongo.ObjectID(order);
-                    await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-                        orders.push(documents[0]);
-                    });
+                try {
+                let o_id = new mongo.ObjectID(order);
+                await db.collection("orders").find().toArray(function (err, documents) {
+                    orders = documents;
+                    console.log(orders);
+                    let ordersMaped = [];
+                    for(let order of data.orders){
+                        let o_id = new mongo.ObjectID(order);
+                        let orderObj = orders.find(_id === o_id);
+                        console.log(orderObj);
+                        ordersMaped.push(orderObj);
+                    }
+                    console.log(ordersMaped);
+                    resolve({orders:ordersMaped, res: data.res});
+                });
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
 
             }
-         }
-        console.log(orders);
-        resolve({orders:orders, res: data.res});
+
+
+
+
 
     });
 }
