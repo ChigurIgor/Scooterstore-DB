@@ -518,7 +518,7 @@ function orderAddToAccount(data, resolve, reject){
 
 
   function orderGetById(id){
-
+console.log('orderGetById');
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
@@ -529,6 +529,7 @@ function orderAddToAccount(data, resolve, reject){
             try {
                 let o_id = new mongo.ObjectID(id);
                 await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
+                    console.log(documents[0]);
                         return documents[0];
                 });
             } finally {
