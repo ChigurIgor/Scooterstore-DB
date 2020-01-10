@@ -550,6 +550,7 @@ console.log('orderGetById');
 
 }
 
+
 function ordersGetByList(data, resolve, reject){
 
 let orders = [];
@@ -558,11 +559,12 @@ let orders = [];
                 try {
                 await db.collection("orders").find().toArray(function (err, documents) {
                     orders = documents;
+                    console.log("orders");
                     console.log(orders);
                     let ordersMaped = [];
                     for(let order of data.orders){
                         let o_id = new mongo.ObjectID(order);
-                        let orderObj = orders.find(_id === o_id);
+                        let orderObj = orders.find(x => x._id  === o_id);
                         console.log(orderObj);
                         ordersMaped.push(orderObj);
                     }
