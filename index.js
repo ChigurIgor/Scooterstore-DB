@@ -556,7 +556,6 @@ let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
                 try {
-                let o_id = new mongo.ObjectID(order);
                 await db.collection("orders").find().toArray(function (err, documents) {
                     orders = documents;
                     console.log(orders);
