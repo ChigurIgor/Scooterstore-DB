@@ -555,26 +555,21 @@ function ordersGetByList(data, resolve, reject){
 let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
-        try {
-            //  for await (let order of data.orders){
-            //     let o_id = new mongo.ObjectID(order);
-            //     await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-            //         orders.push(documents[0]);
-            //     });
-            // }
 
-            for(let order of data.orders){
-               let orderData = orderGetById(order);
-               orders.push(orderData);
+        for await (let order of data.orders){
+            try {
+                    let o_id = new mongo.ObjectID(order);
+                    await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
+                        orders.push(documents[0]);
+                    });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+
             }
-            console.log(orders);
-            resolve({orders:orders, res: data.res});
-
-        } finally {
-            if (mongoClientPromise) mongoClientPromise.close();
-            console.log("client.close()");
-
-        }
+         }
+        console.log(orders);
+        resolve({orders:orders, res: data.res});
 
     });
 }
