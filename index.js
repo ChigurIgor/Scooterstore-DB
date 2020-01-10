@@ -565,12 +565,11 @@ let orders = [];
             for (let order of data.orders){
                 let o_id = new mongo.ObjectID(order);
                 await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-                    console.log(documents);
                     orders.push(documents[0]);
-                    console.log(orders);
                 });
             }
-                  resolve(orders);
+            console.log(orders);
+            resolve({orders:orders, res: data.res});
 
         } finally {
             if (mongoClientPromise) mongoClientPromise.close();
