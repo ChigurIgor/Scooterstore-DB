@@ -294,7 +294,7 @@ function getUserById(data, resolve, reject){
 
                 });
             } finally {
-                if (db) mongoClientPromise.close();
+                if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
 
             }
@@ -385,6 +385,7 @@ app.post('/orders_get_from_user',(req,res)=>{
 
     const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => ordersGetFromAccount(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => ordersGetByList(data, resolve, reject))})
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
     });
 
@@ -553,6 +554,33 @@ function orderAddToAccount(data, resolve, reject){
     data2.res = data.res;
     resolve(data2);
 
+}
+
+function ordersGetByList(data, resolve, reject){
+
+let orders = [];
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db("printsotre");
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+            for (let order of data.orders){
+                let o_id = new mongo.ObjectID(order);
+                await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
+                    console.log(documents);
+                    orders.push(documents[0]);
+                    console.log(orders);
+                });
+            }
+                  resolve(orders);
+
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+
+        }
+
+    });
 }
 
 // // -------------------------------------------------------- orders --------------------------------------------------------------------------
