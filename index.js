@@ -562,7 +562,7 @@ let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
         try {
-            for (let order of data.orders){
+             for await (let order of data.orders){
                 let o_id = new mongo.ObjectID(order);
                 await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
                     orders.push(documents[0]);
@@ -940,12 +940,12 @@ function setCart(data, resolve, reject){
 function sendAnswer(data,resolve,reject) {
     console.log('sendAnswer()');
     console.log('data');
-    console.log(data);
 
     let res = data.res;
     // console.log('res');
     // console.log(res);
     delete data.res;
+    console.log(data);
 
     if (data){
         if(data.msg){
