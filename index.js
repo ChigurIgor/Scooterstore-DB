@@ -517,7 +517,7 @@ function orderAddToAccount(data, resolve, reject){
 
 
 
-  function orderGetById(id, res){
+  function orderGetById(id){
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
@@ -528,18 +528,11 @@ function orderAddToAccount(data, resolve, reject){
             // var allProductsArray = db.collection("phones").find().toArray();
             try {
                 let o_id = new mongo.ObjectID(id);
-
                 await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-
-
-                    sendPDF(documents,res);
-
-
-
-
+                        return documents[0];
                 });
             } finally {
-                if (db) mongoClientPromise.close();
+                if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
 
             }
@@ -562,11 +555,16 @@ let orders = [];
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
         try {
-             for await (let order of data.orders){
-                let o_id = new mongo.ObjectID(order);
-                await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-                    orders.push(documents[0]);
-                });
+            //  for await (let order of data.orders){
+            //     let o_id = new mongo.ObjectID(order);
+            //     await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
+            //         orders.push(documents[0]);
+            //     });
+            // }
+
+            for(let order of data.orders){
+               let orderData = orderGetById(order);
+               orders.push(orderData);
             }
             console.log(orders);
             resolve({orders:orders, res: data.res});
