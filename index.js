@@ -564,7 +564,11 @@ let orders = [];
                     let ordersMaped = [];
                     for(let order of data.orders){
                         let o_id = new mongo.ObjectID(order);
-                        let orderObj = orders.find(x => x._id  === o_id);
+                        console.log('o_id');
+                        console.log(o_id);
+                        console.log('order');
+                        console.log(order);
+                        let orderObj = orders.find(x => x._id  === order);
                         console.log(orderObj);
                         ordersMaped.push(orderObj);
                     }
