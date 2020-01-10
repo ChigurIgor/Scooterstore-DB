@@ -571,11 +571,10 @@ let orders = [];
                         for(let order of orders){
                             console.log('order from base');
                             console.log(order._id);
-                            console.log(order._id === orderId);
-                            console.log(order._id == orderId);
+                            console.log(order._id.equals(orderId) );
 
                         }
-                        let orderObj = orders.find(x => x._id  == orderId);
+                        let orderObj = orders.find(x => x._id.equals(orderId));
                         console.log(orderObj);
                         ordersMaped.push(orderObj);
                     }
