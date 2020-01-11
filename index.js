@@ -572,7 +572,7 @@ function ordersGetByList(data, resolve, reject){
 
 // // -------------------------------------------------------- cart --------------------------------------------------------------------------
 app.post('/cart_set',(req,res)=>{
-    console.log("We are in orders_get_from_user");
+    console.log("We are in cart_set");
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', "*");
