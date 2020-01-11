@@ -70,7 +70,7 @@ function getItems(res){
                     res.end(JSON.stringify(documents));
                 });
             } finally {
-                if (db) mongoClientPromise.close();
+                if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
             }
         }
@@ -552,7 +552,6 @@ function ordersGetByList(data, resolve, reject){
                     orders = documents;
                     let ordersMaped = [];
                     for(let orderId of data.orders){
-                        let o_id = new mongo.ObjectID(orderId);
                              let orderObj = orders.find(x => x._id.equals(orderId));
                         console.log(orderObj);
                         ordersMaped.push(orderObj);
@@ -738,6 +737,49 @@ function cartItemsGetByList(data, resolve, reject){
 
 
 // // -------------------------------------------------------- cart --------------------------------------------------------------------------
+
+
+
+
+// // -------------------------------------------------------- news --------------------------------------------------------------------------
+
+app.get('/news_get',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    console.log('req');
+    console.log(req);
+    getNews(res);
+});
+
+function getNews(res){
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+                await db.collection("news").find().toArray(function (err, documents) {
+                    // console.log(documents);
+                    res.end(JSON.stringify(documents));
+                });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
+    });
+}
+
+
+
+
+
+// // -------------------------------------------------------- news --------------------------------------------------------------------------
+
+
+
+
+
 
 
 
