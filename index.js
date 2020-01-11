@@ -645,6 +645,7 @@ function setCart(data, resolve, reject){
     let cart = data.cart;
 
     console.log(cart);
+    console.log(uid);
 
 
 
@@ -691,6 +692,8 @@ function cartAddItem(data, resolve, reject){
     console.log(item);
     console.log('cart');
     console.log(cart);
+    console.log('uid');
+    console.log(data.uid);
         for(let cartItem of cart){
             if(cartItem.id.equals(item.id)){
                 cartItem.quantity = cartItem.quantity +item.quantity;
