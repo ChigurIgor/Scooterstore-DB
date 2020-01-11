@@ -743,7 +743,7 @@ function cartItemsGetByList(data, resolve, reject){
 
 // // -------------------------------------------------------- news --------------------------------------------------------------------------
 
-app.get('/news_get',(req,res)=>{
+app.post('/news_get',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log('req');
