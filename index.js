@@ -322,6 +322,7 @@ app.post('/user_get',(req,res)=>{
 function getUser(data){
 
     let uid = data.uid;
+    let res = data.res;
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
