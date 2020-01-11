@@ -674,7 +674,7 @@ function setCart(data, resolve, reject){
 function cartGetFromAccount(data, resolve, reject){
     let data2 = {};
     data2.cart = data.user.cart || [];
-    data2.uid = data.user.uid;
+    data2.uid = data.uid;
     data2.item = data.item;
     data2.items = data.items;
     data2.quantity = data.quantity;
