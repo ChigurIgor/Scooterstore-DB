@@ -644,6 +644,8 @@ function setCart(data, resolve, reject){
     let res = data.res;
     let cart = data.cart;
 
+    console.log(cart);
+
 
 
 
