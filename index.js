@@ -697,7 +697,8 @@ function cartAddItem(data, resolve, reject){
         for(let cartItem of cart){
             console.log(cartItem);
             console.log(cartItem.id);
-            if((cartItem.id).equals(item.id)){
+            console.log(item.id);
+            if((cartItem.id) == (item.id)){
                 cartItem.quantity = cartItem.quantity +item.quantity;
             }
         }
