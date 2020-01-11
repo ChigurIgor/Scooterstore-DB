@@ -686,7 +686,7 @@ function cartAddItem(data, resolve, reject){
 
     let cart = data.cart;
     let item = data.item;
-    let quantity = data.quantity;
+    let quantity = parseInt(data.quantity);
     console.log('cartAddItem');
     console.log('item');
     console.log(item);
