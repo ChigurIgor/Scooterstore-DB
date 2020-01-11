@@ -694,7 +694,7 @@ function cartAddItem(data, resolve, reject){
                 cartItem.quantity = cartItem.quantity +item.quantity;
             }
         }
-        if(cart.find(x => x.id.equals(id))){
+        if(!cart.find(x => x.id.equals(id))){
             let obj = {id: item.id, quantity: quantity};
             cart.push();
         }
