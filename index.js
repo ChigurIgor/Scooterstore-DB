@@ -698,11 +698,11 @@ function cartAddItem(data, resolve, reject){
             console.log(cartItem);
             console.log(cartItem.id);
             console.log(item._id);
-            if((cartItem.id).equals(item._id)){
+            if((""+cartItem.id).equals(item._id)){
                 cartItem.quantity = cartItem.quantity +quantity;
             }
         }
-        if(!cart.find(x => x.id.equals(item._id))){
+        if(!cart.find(x => (""+x.id).equals(item._id))){
             let obj = {id: item._id, quantity: quantity};
             cart.push(obj);
         }
