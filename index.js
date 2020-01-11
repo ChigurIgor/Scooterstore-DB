@@ -634,9 +634,9 @@ app.post('/cart_get_from_user',(req,res)=>{
 
     const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => cartGetFromAccount(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => cartItemsGetByList(data, resolve, reject))})
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
-
 
 function setCart(data, resolve, reject){
     console.log('setCart');
@@ -697,13 +697,13 @@ function cartAddItem(data, resolve, reject){
         for(let cartItem of cart){
             console.log(cartItem);
             console.log(cartItem.id);
-            console.log(item.id);
-            if((cartItem.id) == (item.id)){
+            console.log(item._id);
+            if((cartItem.id).equals(item._id)){
                 cartItem.quantity = cartItem.quantity +quantity;
             }
         }
-        if(!cart.find(x => x.id == (item.id))){
-            let obj = {id: item.id, quantity: quantity};
+        if(!cart.find(x => x.id.equals(item._id))){
+            let obj = {id: item._id, quantity: quantity};
             cart.push(obj);
         }
     console.log('cart after manipulations');
@@ -712,6 +712,29 @@ function cartAddItem(data, resolve, reject){
     resolve(data);
 }
 
+function cartItemsGetByList(data, resolve, reject){
+    let items = [];
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        try {
+            await db.collection("items").find().toArray(function (err, documents) {
+                items = documents;
+                let itemsMaped = [];
+                for(let item of data.cart){
+                    let o_id = new mongo.ObjectID(item._id);
+                    let itemObj = items.find(x => x._id.equals(item._id));
+                    console.log(itemObj);
+                    itemsMaped.push(itemObj);
+                }
+                console.log(itemsMaped);
+                resolve({cart:itemsMaped, res: data.res});
+            });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+    });
+}
 
 
 // // -------------------------------------------------------- cart --------------------------------------------------------------------------
