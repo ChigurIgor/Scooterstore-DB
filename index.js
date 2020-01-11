@@ -720,10 +720,7 @@ function cartItemsGetByList(data, resolve, reject){
             await db.collection("items").find().toArray(function (err, documents) {
                 items = documents;
                 console.log('cartItemsGetByList');
-                console.log('items');
-                console.log(items);
-                console.log('data.cart');
-                console.log(data.cart);
+
 
                 let itemsMaped = [];
                 for(let item of data.cart){
@@ -731,7 +728,7 @@ function cartItemsGetByList(data, resolve, reject){
                     console.log(item);
 
                     // let o_id = new mongo.ObjectID(item._id);
-                    let itemObj = items.find(x => x._id.valueOf() == (item._id).valueOf());
+                    let itemObj = items.find(x => x._id.valueOf() == (item.id).valueOf());
                     console.log(itemObj);
                     itemsMaped.push(itemObj);
                 }
