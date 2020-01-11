@@ -723,6 +723,7 @@ function cartItemsGetByList(data, resolve, reject){
                 let itemsMaped = [];
                 for(let item of data.cart){
                     let itemObj = items.find(x => x._id.valueOf() == (item.id).valueOf());
+                    itemObj.quantity = item.quantity;
                     itemsMaped.push(itemObj);
                 }
                 console.log(itemsMaped);
