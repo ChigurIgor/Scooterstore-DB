@@ -699,7 +699,7 @@ function cartAddItem(data, resolve, reject){
             console.log(cartItem.id);
             console.log(item.id);
             if((cartItem.id) == (item.id)){
-                cartItem.quantity = cartItem.quantity +item.quantity;
+                cartItem.quantity = cartItem.quantity +quantity;
             }
         }
         if(!cart.find(x => x.id == (item.id))){
