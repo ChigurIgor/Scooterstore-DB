@@ -696,7 +696,7 @@ function cartAddItem(data, resolve, reject){
         }
         if(!cart.find(x => x.id.equals(id))){
             let obj = {id: item.id, quantity: quantity};
-            cart.push();
+            cart.push(obj);
         }
     console.log('cart after manipulations');
     console.log(cart);
