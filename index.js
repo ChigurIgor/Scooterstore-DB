@@ -722,7 +722,7 @@ function cartItemsGetByList(data, resolve, reject){
                 let itemsMaped = [];
                 for(let item of data.cart){
                     let o_id = new mongo.ObjectID(item._id);
-                    let itemObj = items.find(x => x._id.equals(item._id));
+                    let itemObj = items.find(x => x._id.valueOf() == (item._id).valueOf());
                     console.log(itemObj);
                     itemsMaped.push(itemObj);
                 }
