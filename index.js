@@ -571,6 +571,73 @@ function ordersGetByList(data, resolve, reject){
 
 
 // // -------------------------------------------------------- cart --------------------------------------------------------------------------
+app.post('/cart_set',(req,res)=>{
+    console.log("We are in orders_get_from_user");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+
+    let data ={};
+    data.uid="";
+    let body = '';
+
+    var post = req.body;
+
+    data.uid = post.uid[0];
+    data.cart = post.cart;
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => setCart(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+});
+
+app.post('/cart_add',(req,res)=>{
+    console.log("We are in orders_get_from_user");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+
+    let data ={};
+    let body = '';
+
+    var post = req.body;
+
+    data.uid = post.uid[0];
+    data.item = post.item;
+    data.quantity = post.quantity;
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => cartGetFromAccount(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => cartAddItem(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+});
+
+app.post('/cart_get_from_user',(req,res)=>{
+    console.log("We are in orders_get_from_user");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+
+    let data ={};
+    data.uid="";
+    let body = '';
+
+    var post = req.body;
+
+    data.uid = post.uid[0];
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => cartGetFromAccount(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+});
+
+
 function setCart(data, resolve, reject){
     console.log('setCart');
     let uid = data.uid;
@@ -599,6 +666,42 @@ function setCart(data, resolve, reject){
 
     });
 
+}
+
+function cartGetFromAccount(data, resolve, reject){
+    let data2 = {};
+    data2.cart = data.user.cart || [];
+    data2.uid = data.user.uid;
+    data2.item = data.item;
+    data2.items = data.items;
+    data2.quantity = data.quantity;
+    data2.res = data.res;
+    resolve(data2);
+}
+
+function cartAddItem(data, resolve, reject){
+
+    let cart = data.cart;
+    let item = data.item;
+    let quantity = data.quantity;
+    console.log('cartAddItem');
+    console.log('item');
+    console.log(item);
+    console.log('cart');
+    console.log(cart);
+        for(let cartItem of cart){
+            if(cartItem.id.equals(item.id)){
+                cartItem.quantity = cartItem.quantity +item.quantity;
+            }
+        }
+        if(cart.find(x => x.id.equals(id))){
+            let obj = {id: item.id, quantity: quantity};
+            cart.push();
+        }
+    console.log('cart after manipulations');
+    console.log(cart);
+    data.cart = cart;
+    resolve(data);
 }
 
 
