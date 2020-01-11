@@ -99,7 +99,7 @@ function getItem(id,res){
                     res.end(JSON.stringify(documents));
                 });
             } finally {
-                if (db) mongoClientPromise.close();
+                if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
             }
         }
@@ -300,6 +300,47 @@ function getUserById(data, resolve, reject){
             }
         }
 
+    });
+}
+
+app.post('/user_get',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let data ={};
+    data.uid="";
+    let body = '';
+
+    var post = req.body;
+    console.log('user_get');
+    data.uid = post.uid[0];
+    data.res = res;
+    console.log(data);
+
+    getUser(data);
+});
+
+function getUser(data){
+
+    let uid = data.uid;
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+                await db.collection("users").find().toArray(function (err, documents) {
+                    console.log(documents);
+
+                    const item = documents.find(item => item._id === uid);
+
+                    res.end(JSON.stringify(item));
+                });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
     });
 }
 
