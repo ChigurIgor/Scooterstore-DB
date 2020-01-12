@@ -331,7 +331,7 @@ function getUser(data){
         }else {
             const db = client.db(dbName);
             try {
-                let o_id = new mongo.ObjectID(id);
+                let o_id = new mongo.ObjectID(uid);
                 await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
                     console.log(documents);
                     res.end(JSON.stringify(documents[0]));
