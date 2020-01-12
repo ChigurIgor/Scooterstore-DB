@@ -320,6 +320,7 @@ app.post('/user_get',(req,res)=>{
 });
 
 function getUser(data){
+    console.log('getUser');
 
     let uid = data.uid;
     let res = data.res;
@@ -330,12 +331,10 @@ function getUser(data){
         }else {
             const db = client.db(dbName);
             try {
-                await db.collection("users").find().toArray(function (err, documents) {
+                let o_id = new mongo.ObjectID(id);
+                await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
                     console.log(documents);
-
-                    const item = documents.find(item => item._id === uid);
-
-                    res.end(JSON.stringify(item));
+                    res.end(JSON.stringify(documents[0]));
                 });
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
