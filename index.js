@@ -334,6 +334,7 @@ function getUser(data){
                 let o_id = new mongo.ObjectID(uid);
                 await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
                     console.log(documents);
+                    delete documents[0].password;
                     res.end(JSON.stringify(documents[0]));
                 });
             } finally {
