@@ -366,8 +366,9 @@ app.post('/user_set',(req,res)=>{
 
 function setUser(data, resolve, reject) {
     console.log('setUser');
+    let res = data.res;
+
     let uid = data.user._id;
-    let res = data.user.res;
     let name = data.user.name;
     let surname = data.user.surname;
     let postcode = data.user.postcode;
@@ -379,6 +380,7 @@ function setUser(data, resolve, reject) {
     let phone = data.user.phone;
     let getnewsagree = data.user.getnewsagree;
 
+    console.log(uid);
     console.log(name);
     console.log(surname);
     console.log(postcode);
