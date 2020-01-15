@@ -351,13 +351,11 @@ app.post('/user_set',(req,res)=>{
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log('user_set');
     let data ={};
-    data.uid="";
     let body = '';
 
     var post = req.body;
     data.user = post.user;
     data.res = res;
-    // console.log(data);
 
     const promise = new Promise((resolve, reject) => setUser(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
@@ -366,7 +364,7 @@ app.post('/user_set',(req,res)=>{
 
 function setUser(data, resolve, reject) {
     console.log('setUser');
-    let uid = data.uid;
+    let uid = data._id;
     let res = data.res;
     let name = data.name;
     let surname = data.surname;
