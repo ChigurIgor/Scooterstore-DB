@@ -349,13 +349,13 @@ function getUser(data) {
 app.post('/user_set',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    console.log('user_get');
+    console.log('user_set');
     let data ={};
     data.uid="";
     let body = '';
 
     var post = req.body;
-    console.log(post);
+    console.log(post[0]);
     data.uid = post._id[0];
     data.res = res;
     console.log(data);
