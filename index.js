@@ -357,7 +357,7 @@ app.post('/user_set',(req,res)=>{
     var post = req.body;
     data.user = post.user;
     data.res = res;
-    console.log(data);
+    // console.log(data);
 
     const promise = new Promise((resolve, reject) => setUser(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
