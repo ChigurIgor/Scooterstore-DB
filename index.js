@@ -131,45 +131,38 @@ app.post('/registration',(req,res)=>{
     let phone="";
     let getnewsagree;
 
-    let body = '';
-    // console.log(req);
-    // console.log(req.toString());
-    console.log("req.data.body");
-    console.log(req.body);
 
-    // req.on('data', chunk => {
-    //     body += chunk.toString(); // convert Buffer to string
-    //     console.log(body);
-    //     console.log(chunk);
-    // });
-    // body= req.body;
-    // req.on('end', () => {
-        var post = req.body;
-        // var post = qs.parse(body);
-    //     console.log("req.end");
-    //
-    //     console.log(body);
-        name=post.name;
-        surname=post.surname;
-        street=post.street;
-        house=post.house;
-        postcode=post.postcode;
-        city=post.city;
-        country=post.country;
-        email=post.email;
-        password=post.password;
-        phone=post.phone;
-        getnewsagree = post.getnewsagree;
+    console.log("req.data.body");
+
+
+    var post = req.body;
+    let data ={};
+    data.name=post.name;
+    data.surname=post.surname;
+    data.street=post.street;
+    data.house=post.house;
+    data.postcode=post.postcode;
+    data.city=post.city;
+    data.country=post.country;
+    data.email=post.email;
+    data.password=post.password;
+    data.phone=post.phone;
+    data.getnewsagree = post.getnewsagree;
+
+    data.res = res;
 
         userAdd(name,surname,street,house,postcode,city,country,email,password,phone,getnewsagree);
-        res.end(JSON.stringify({ msg: "OK" }));
+
+    const promise = new Promise((resolve, reject) => userAdd(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+
     // });
 // console.log(req.body.gender);
 
 });
 
-function userAdd(name,surname,street,house,postcode,city,country,email,password,phone,getnewsagree) {
-
+function userAdd(data, resolve, reject) {
+    let res = data.res;
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
 
@@ -177,19 +170,19 @@ function userAdd(name,surname,street,house,postcode,city,country,email,password,
         let cart = [];
         let orders = [];
         let user = {
-            name: name,
-            surname:surname,
-            street:street,
-            house:house,
-            postcode:postcode,
-            city:city,
-            cart: cart,
-            orders: orders,
-            country:country,
-            email:email,
-            password:password,
-            phone:phone,
-            getnewsagree: getnewsagree
+            name: data.name,
+            surname:data.surname,
+            street:data.street,
+            house:data.house,
+            postcode:data.postcode,
+            city:data.city,
+            cart: data.cart,
+            orders: data.orders,
+            country:data.country,
+            email:data.email,
+            password:data.password,
+            phone:data.phone,
+            getnewsagree: data.getnewsagree
         };
         try {
             await collection.insertOne(user, function (err, result) {
@@ -198,12 +191,12 @@ function userAdd(name,surname,street,house,postcode,city,country,email,password,
                     return console.log(err);
                 }
                 console.log(result.ops);
+                resolve({ user: user ,res: res});
 
             });
         } finally {
-            if (db) mongoClientPromise.close();
+            if (mongoClientPromise) mongoClientPromise.close();
             console.log("client.close()");
-            res.end(JSON.stringify({ msg: "OK" }));
         }
     });
 
