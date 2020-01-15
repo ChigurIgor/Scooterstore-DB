@@ -366,18 +366,18 @@ app.post('/user_set',(req,res)=>{
 
 function setUser(data, resolve, reject) {
     console.log('setUser');
-    let uid = data._id;
-    let res = data.res;
-    let name = data.name;
-    let surname = data.surname;
-    let postcode = data.postcode;
-    let email = data.email;
-    let country = data.country;
-    let street = data.street;
-    let house = data.house;
-    let city = data.city;
-    let phone = data.phone;
-    let getnewsagree = data.getnewsagree;
+    let uid = data.user._id;
+    let res = data.user.res;
+    let name = data.user.name;
+    let surname = data.user.surname;
+    let postcode = data.user.postcode;
+    let email = data.user.email;
+    let country = data.user.country;
+    let street = data.user.street;
+    let house = data.user.house;
+    let city = data.user.city;
+    let phone = data.user.phone;
+    let getnewsagree = data.user.getnewsagree;
 
     console.log(name);
     console.log(surname);
