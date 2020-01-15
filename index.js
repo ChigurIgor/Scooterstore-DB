@@ -355,8 +355,7 @@ app.post('/user_set',(req,res)=>{
     let body = '';
 
     var post = req.body;
-    console.log(post[0]);
-    data.uid = post._id[0];
+    data.user = post.user;
     data.res = res;
     console.log(data);
 
