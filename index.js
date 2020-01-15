@@ -319,7 +319,7 @@ app.post('/user_get',(req,res)=>{
     getUser(data);
 });
 
-function getUser(data){
+function getUser(data) {
     console.log('getUser');
 
     let uid = data.uid;
@@ -342,6 +342,86 @@ function getUser(data){
                 console.log("client.close()");
             }
         }
+    });
+}
+
+
+app.post('/user_set',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let data ={};
+    data.uid="";
+    let body = '';
+
+    var post = req.body;
+    console.log('user_get');
+    data.uid = post.uid[0];
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => setUser(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+
+});
+
+function setUser(data, resolve, reject) {
+    console.log('setUser');
+    let uid = data.uid;
+    let res = data.res;
+    let name = data.name;
+    let surname = data.surname;
+    let postcode = data.postcode;
+    let email = data.email;
+    let country = data.country;
+    let street = data.street;
+    let house = data.house;
+    let city = data.city;
+    let phone = data.phone;
+    let getnewsagree = data.getnewsagree;
+
+    console.log(name);
+    console.log(surname);
+    console.log(postcode);
+    console.log(email);
+    console.log(country);
+    console.log(street);
+    console.log(house);
+    console.log(city);
+    console.log(phone);
+    console.log(getnewsagree);
+
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+
+            let o_id = new mongo.ObjectID(uid);
+            await db.collection("users")
+                    .updateOne({"_id" : o_id },
+                        { $set:
+                                {
+                                    name: name,
+                                    surname: surname,
+                                    postcode: postcode,
+                                    email: email,
+                                    country: country,
+                                    street: street,
+                                    house: house,
+                                    city: city,
+                                    phone: phone,
+                                    getnewsagree: getnewsagree
+                                    } }, function(err, documents) {
+                if (err) throw err;
+                resolve({ msg: "OK" ,res: res});
+            });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+
+
     });
 }
 
