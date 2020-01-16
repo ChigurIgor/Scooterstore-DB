@@ -180,21 +180,24 @@ function userAdd(data, resolve, reject) {
             phone:data.phone,
             getnewsagree: data.getnewsagree
         };
-        try {
-            await collection.insertOne(user, function (err, result) {
+        console.log(user);
 
-                if (err) throw err;
-                console.log('userAdd');
-                console.log(result.ops);
-                console.log(resolve);
-                resolve({ user: user ,res: res});
+        resolve({ msg: "OK" ,res: res});
 
-            });
-        } finally {
-            if (mongoClientPromise) mongoClientPromise.close();
-            console.log("client.close()");
-        }
-    });
+        //     try {
+    //         await collection.insertOne(user, function (err, result) {
+    //
+    //             if (err) throw err;
+    //             console.log('userAdd');
+    //             console.log(result.ops);
+    //             resolve({ user: user ,res: res});
+    //
+    //         });
+    //     } finally {
+    //         if (mongoClientPromise) mongoClientPromise.close();
+    //         console.log("client.close()");
+    //     }
+    // });
 
     // var mongoClientPromise = mongoClient.connect(async function (err, client) {
     //     const db = client.db(dbName);
