@@ -132,9 +132,6 @@ app.post('/registration',(req,res)=>{
     let getnewsagree;
 
 
-    console.log("req.data.body");
-
-
     var post = req.body;
     let data ={};
     data.name=post.name;
@@ -154,10 +151,9 @@ app.post('/registration',(req,res)=>{
         userAdd(name,surname,street,house,postcode,city,country,email,password,phone,getnewsagree);
 
     const promise = new Promise((resolve, reject) => userAdd(data, resolve, reject))
-        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
 
-    // });
-// console.log(req.body.gender);
+
 
 });
 
@@ -188,7 +184,9 @@ function userAdd(data, resolve, reject) {
             await collection.insertOne(user, function (err, result) {
 
                 if (err) throw err;
+                console.log('userAdd');
                 console.log(result.ops);
+                console.log(resolve);
                 resolve({ user: user ,res: res});
 
             });
@@ -197,6 +195,27 @@ function userAdd(data, resolve, reject) {
             console.log("client.close()");
         }
     });
+
+    // var mongoClientPromise = mongoClient.connect(async function (err, client) {
+    //     const db = client.db(dbName);
+    //     try {
+    //         await db.collection("items").find().toArray(function (err, documents) {
+    //             items = documents;
+    //             console.log('cartItemsGetByList');
+    //             let itemsMaped = [];
+    //             for(let item of data.cart){
+    //                 let itemObj = items.find(x => x._id.valueOf() == (item.id).valueOf());
+    //                 itemObj.quantity = item.quantity;
+    //                 itemsMaped.push(itemObj);
+    //             }
+    //             console.log(itemsMaped);
+    //             resolve({cart:itemsMaped, res: data.res});
+    //         });
+    //     } finally {
+    //         if (mongoClientPromise) mongoClientPromise.close();
+    //         console.log("client.close()");
+    //     }
+    // });
 
 
 }
@@ -371,19 +390,6 @@ function setUser(data, resolve, reject) {
     let phone = data.user.phone;
     let getnewsagree = data.user.getnewsagree;
 
-    console.log(uid);
-    console.log(name);
-    console.log(surname);
-    console.log(postcode);
-    console.log(email);
-    console.log(country);
-    console.log(street);
-    console.log(house);
-    console.log(city);
-    console.log(phone);
-    console.log(getnewsagree);
-
-
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
         var answer = "0";
@@ -413,7 +419,6 @@ function setUser(data, resolve, reject) {
             if (mongoClientPromise) mongoClientPromise.close();
             console.log("client.close()");
         }
-
 
     });
 }
