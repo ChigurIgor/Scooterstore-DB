@@ -187,7 +187,7 @@ function userAdd(data, resolve, reject) {
 
                 if (err) throw err;
                 console.log('userAdded');
-                console.log(result.ops);
+                    delete user.password;
                 resolve({ user: user ,res: res});
 
             });
