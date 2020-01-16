@@ -148,7 +148,6 @@ app.post('/registration',(req,res)=>{
 
     data.res = res;
 
-        userAdd(name,surname,street,house,postcode,city,country,email,password,phone,getnewsagree);
 
     const promise = new Promise((resolve, reject) => userAdd(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
@@ -158,11 +157,13 @@ app.post('/registration',(req,res)=>{
 });
 
 function userAdd(data, resolve, reject) {
-    let res = data.res;
-    // var mongoClientPromise = mongoClient.connect(async function (err, client) {
-    //     const db = client.db(dbName);
+    console.log('userAdd');
 
-        // const collection = db.collection("users");
+    let res = data.res;
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+
+        const collection = db.collection("users");
         let cart = [];
         let orders = [];
         let user = {
@@ -181,46 +182,20 @@ function userAdd(data, resolve, reject) {
             getnewsagree: data.getnewsagree
         };
         console.log(user);
+       try {
+    await collection.insertOne(user, function (err, result) {
 
-        resolve({ msg: "OK" ,res: res});
+                if (err) throw err;
+                console.log('userAdded');
+                console.log(result.ops);
+                resolve({ user: user ,res: res});
 
-       // try {
-    // await collection.insertOne(user, function (err, result) {
-    //
-    //             if (err) throw err;
-    //             console.log('userAdd');
-    //             console.log(result.ops);
-    //             resolve({ user: user ,res: res});
-    //
-    //         });
-    //     } finally {
-    //         if (mongoClientPromise) mongoClientPromise.close();
-    //         console.log("client.close()");
-    //     }
-    // });
-
-    // var mongoClientPromise = mongoClient.connect(async function (err, client) {
-    //     const db = client.db(dbName);
-    //     try {
-    //         await db.collection("items").find().toArray(function (err, documents) {
-    //             items = documents;
-    //             console.log('cartItemsGetByList');
-    //             let itemsMaped = [];
-    //             for(let item of data.cart){
-    //                 let itemObj = items.find(x => x._id.valueOf() == (item.id).valueOf());
-    //                 itemObj.quantity = item.quantity;
-    //                 itemsMaped.push(itemObj);
-    //             }
-    //             console.log(itemsMaped);
-    //             resolve({cart:itemsMaped, res: data.res});
-    //         });
-    //     } finally {
-    //         if (mongoClientPromise) mongoClientPromise.close();
-    //         console.log("client.close()");
-    //     }
-    // });
-
-
+            });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+    });
 }
 
 app.post('/login',(req,res)=>{
