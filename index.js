@@ -187,9 +187,7 @@ function userAdd(data, resolve, reject) {
         try {
             await collection.insertOne(user, function (err, result) {
 
-                if (err) {
-                    return console.log(err);
-                }
+                if (err) throw err;
                 console.log(result.ops);
                 resolve({ user: user ,res: res});
 
