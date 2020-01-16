@@ -241,13 +241,13 @@ function loginFun(login,password,res){
                 console.log(password);
                 await db.collection("users").find({email: login,password: password}).toArray(function (err, documents) {
                     console.log(documents);
-
-                    res.end(JSON.stringify(documents));
+                    delete documents[0].password;
+                    res.end(JSON.stringify(documents[0]));
 
 
                 });
             } finally {
-                if (db) mongoClientPromise.close();
+                if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
 
             }
