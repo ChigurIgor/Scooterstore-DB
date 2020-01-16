@@ -159,7 +159,7 @@ app.post('/registration',(req,res)=>{
 
 function userAdd(data, resolve, reject) {
     let res = data.res;
-    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+    // var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
 
         const collection = db.collection("users");
@@ -184,8 +184,8 @@ function userAdd(data, resolve, reject) {
 
         resolve({ msg: "OK" ,res: res});
 
-        //     try {
-    //         await collection.insertOne(user, function (err, result) {
+       // try {
+    // await collection.insertOne(user, function (err, result) {
     //
     //             if (err) throw err;
     //             console.log('userAdd');
