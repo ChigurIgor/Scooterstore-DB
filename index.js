@@ -160,9 +160,9 @@ app.post('/registration',(req,res)=>{
 function userAdd(data, resolve, reject) {
     let res = data.res;
     // var mongoClientPromise = mongoClient.connect(async function (err, client) {
-        const db = client.db(dbName);
+    //     const db = client.db(dbName);
 
-        const collection = db.collection("users");
+        // const collection = db.collection("users");
         let cart = [];
         let orders = [];
         let user = {
