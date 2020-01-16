@@ -321,12 +321,12 @@ function getUser(data) {
                 let o_id = new mongo.ObjectID(uid);
                 await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
                     console.log(documents);
-                    if(documents.length == 0){
-                        res.end(JSON.stringify({msg:"Error occurred"}));
-                    }
-
+                    if (documents.length == 0) {
+                        res.end(JSON.stringify({msg: "Error occurred"}));
+                    } else {
                     delete documents[0].password;
                     res.end(JSON.stringify(documents[0]));
+                }
                 });
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
