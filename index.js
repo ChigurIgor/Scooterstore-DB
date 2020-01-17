@@ -241,7 +241,9 @@ function loginFun(login,password,res){
                 console.log(password);
                 await db.collection("users").find({email: login,password: password}).toArray(function (err, documents) {
                     console.log(documents);
-                    delete documents[0].password;
+                    if ( documents.length > 0){
+                        delete documents[0].password;
+                    }
                     res.end(JSON.stringify(documents[0]));
 
 
