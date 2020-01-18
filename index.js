@@ -107,6 +107,67 @@ function getItem(id,res){
 }
 
 
+app.post('/item_add',(req,res)=>{
+    console.log("We are in registration");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+    // let description="";
+    // let imgs=[];
+    // let material="";
+    // let name="";
+    // let price;
+    // let type="";
+    // let cat="";
+    var post = req.body;
+    let data ={};
+    data.description=post.description;
+    data.imgs=post.imgs;
+    data.material=post.material;
+    data.name=post.name;
+    data.price=post.price;
+    data.type=post.type;
+    data.cat=post.cat;
+    data.res = res;
+
+    const promise = new Promise((resolve, reject) => itemAdd(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
+
+});
+
+function itemAdd(data, resolve, reject) {
+    console.log('itemAdd');
+    let res = data.res;
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        const collection = db.collection("items");
+        let cart = [];
+        let orders = [];
+        let item = {
+            description: data.description,
+            imgs:data.imgs,
+            material:data.material,
+            name:data.name,
+            price:data.price,
+            type:data.type,
+            cat: data.cat,
+            };
+        console.log(item);
+        try {
+            await collection.insertOne(item, function (err, result) {
+                if (err) throw err;
+                console.log('itemAdded');
+                delete user.password;
+                resolve({ msg: "OK" ,res: res});
+            });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+    });
+}
+
+
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
 //
