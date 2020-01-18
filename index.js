@@ -121,13 +121,13 @@ app.post('/item_add',(req,res)=>{
     // let cat="";
     var post = req.body;
     let data ={};
-    data.description=post.description;
-    data.imgs=post.imgs;
-    data.material=post.material;
-    data.name=post.name;
-    data.price=post.price;
-    data.type=post.type;
-    data.cat=post.cat;
+    data.description=post.item.description;
+    data.imgs=post.item.imgs;
+    data.material=post.item.material;
+    data.name=post.item.name;
+    data.price=post.item.price;
+    data.type=post.item.type;
+    data.cat=post.item.cat;
     data.res = res;
 
     const promise = new Promise((resolve, reject) => itemAdd(data, resolve, reject))
