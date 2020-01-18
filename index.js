@@ -169,15 +169,13 @@ function itemAdd(data, resolve, reject) {
 
 
 app.post('/item_delete',(req,res)=>{
-    console.log("We are in registration");
+    console.log("We are in item_delete");
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', "*");
-    data.uid="";
-    let body = '';
 
     var post = req.body;
-    console.log('item_delete');
+    let data ={};
     console.log(req.body);
     data.id = post.id;
     data.res = res;
