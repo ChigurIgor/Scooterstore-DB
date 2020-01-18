@@ -82,6 +82,7 @@ app.get('/getitem',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     let id="";
+    //todo  fix id check
     console.log('req');
     console.log(req);
     getItem(id,res);
@@ -163,6 +164,51 @@ function itemAdd(data, resolve, reject) {
             if (mongoClientPromise) mongoClientPromise.close();
             console.log("client.close()");
         }
+    });
+}
+
+
+app.post('/item_delete',(req,res)=>{
+    console.log("We are in registration");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+    data.uid="";
+    let body = '';
+
+    var post = req.body;
+    console.log('item_delete');
+    console.log(req.body);
+    data.id = post.id;
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => itemDelete(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
+
+});
+
+function itemDelete(data, resolve, reject) {
+    console.log('itemDelete');
+    let res = data.res;
+    let id = data.id;
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+
+            let o_id = new mongo.ObjectID(id);
+            await db.collection("items")
+                .deleteOne({"_id" : o_id  }, function(err, documents) {
+                        if (err) throw err;
+                        resolve({ msg: "OK" ,res: res});
+                    });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+
     });
 }
 
