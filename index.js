@@ -210,6 +210,69 @@ function itemDelete(data, resolve, reject) {
     });
 }
 
+app.post('/item_set',(req,res)=>{
+    console.log("We are in item_delete");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', "*");
+
+    var post = req.body;
+    let data ={};
+    data.description=post.item.description;
+    data.imgs=post.item.imgs;
+    data.material=post.item.material;
+    data.name=post.item.name;
+    data.price=post.item.price;
+    data.type=post.item.type;
+    data.cat=post.item.cat;
+    data.id = post.id;
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => itemSet(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
+
+});
+
+function itemSet(data, resolve, reject) {
+    console.log('itemDelete');
+    let res = data.res;
+    let id = data.id;
+    let description = data.description;
+    let imgs = data.imgs;
+    let material = data.material;
+    let name = data.name;
+    let price = data.price;
+    let type = data.type;
+    let cat = data.cat;
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        const db = client.db(dbName);
+        var answer = "0";
+        // var allProductsArray = db.collection("items").find().toArray();
+        try {
+            let o_id = new mongo.ObjectID(id);
+            await db.collection("item")
+                .updateOne({"_id" : o_id },
+                    { $set:
+                            {
+                                name: name,
+                                description: description,
+                                imgs: imgs,
+                                material: material,
+                                name: name,
+                                price: price,
+                                type: type,
+                                cat: cat
+                            } }, function(err, documents) {
+                        if (err) throw err;
+                        resolve({ msg: "OK" ,res: res});
+                    });
+        } finally {
+            if (mongoClientPromise) mongoClientPromise.close();
+            console.log("client.close()");
+        }
+    });
+}
 
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
