@@ -226,8 +226,8 @@ app.post('/item_set',(req,res)=>{
     data.type=post.item.type;
     data.cat=post.item.cat;
     data.id = post.id;
-    data.res = res;
     console.log(data);
+    data.res = res;
 
     const promise = new Promise((resolve, reject) => itemSet(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
@@ -235,7 +235,7 @@ app.post('/item_set',(req,res)=>{
 });
 
 function itemSet(data, resolve, reject) {
-    console.log('itemDelete');
+    console.log('itemSet');
     let res = data.res;
     let id = data.id;
     let description = data.description;
@@ -251,7 +251,7 @@ function itemSet(data, resolve, reject) {
         // var allProductsArray = db.collection("items").find().toArray();
         try {
             let o_id = new mongo.ObjectID(id);
-            await db.collection("item")
+            await db.collection("items")
                 .updateOne({"_id" : o_id },
                     { $set:
                             {
@@ -259,7 +259,6 @@ function itemSet(data, resolve, reject) {
                                 description: description,
                                 imgs: imgs,
                                 material: material,
-                                name: name,
                                 price: price,
                                 type: type,
                                 cat: cat
