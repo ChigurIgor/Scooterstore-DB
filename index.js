@@ -157,7 +157,6 @@ function itemAdd(data, resolve, reject) {
             await collection.insertOne(item, function (err, result) {
                 if (err) throw err;
                 console.log('itemAdded');
-                delete user.password;
                 resolve({ msg: "OK" ,res: res});
             });
         } finally {
