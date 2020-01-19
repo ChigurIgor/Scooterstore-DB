@@ -83,15 +83,13 @@ app.get('/getitem',(req,res)=>{
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     //todo  fix id check
     //  todo  --     rewrite
-    console.log('req');
-    console.log(req);
-
+    console.log('getitem');
     let data ={};
     var post = req.body;
-    console.log('getitem');
     data.id = post.id;
-    data.res = res;
     console.log(data);
+
+    data.res = res;
 
     const promise = new Promise((resolve, reject) => getItem(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
@@ -113,9 +111,9 @@ function getItem(data, resolve, reject){
                 await db.collection("items").find({ "_id" : o_id }).toArray(function (err, documents) {
                     console.log(documents);
                     if (documents.length == 0) {
-                        res.end(JSON.stringify({msg: "Error occurred"}));
+                        resolve({msg: "Error occurred"});
                     } else {
-                        res.end(JSON.stringify(documents[0]));
+                        resolve(documents[0]);
                     }
                 });
             } finally {
