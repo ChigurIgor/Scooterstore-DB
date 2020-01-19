@@ -81,23 +81,42 @@ function getItems(res){
 app.get('/getitem',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    let id="";
     //todo  fix id check
+    //  todo  --     rewrite
     console.log('req');
     console.log(req);
-    getItem(id,res);
+
+    let data ={};
+    var post = req.body;
+    console.log('getitem');
+    data.id = post.id;
+    data.res = res;
+    console.log(data);
+
+    const promise = new Promise((resolve, reject) => getItem(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
+
 });
 
-function getItem(id,res){
+function getItem(data, resolve, reject){
+    console.log('getItem');
+    let id = data.id;
+    let res = data.res;
+
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
         }else {
             const db = client.db(dbName);
             try {
-                await db.collection("items").find().toArray(function (err, documents) {
-                    // console.log(documents);
-                    res.end(JSON.stringify(documents));
+                let o_id = new mongo.ObjectID(id);
+                await db.collection("items").find({ "_id" : o_id }).toArray(function (err, documents) {
+                    console.log(documents);
+                    if (documents.length == 0) {
+                        res.end(JSON.stringify({msg: "Error occurred"}));
+                    } else {
+                        res.end(JSON.stringify(documents[0]));
+                    }
                 });
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
@@ -471,7 +490,7 @@ app.post('/user_get',(req,res)=>{
     data.uid = post.uid[0];
     data.res = res;
     console.log(data);
-
+ //  todo  --     rewrite
     getUser(data);
 });
 
@@ -479,6 +498,7 @@ function getUser(data) {
     console.log('getUser');
     let uid = data.uid;
     let res = data.res;
+    //  todo  --     rewrite
 
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
