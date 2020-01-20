@@ -639,7 +639,7 @@ app.post('/order_add',(req,res)=>{
     data.paymentPayerAddress=post.paymentPayerAddress;
     data.res = res;
 
-console.log(data);
+// console.log(data);
 
 const promise = new Promise((resolve, reject) => orderAdd(data, resolve, reject))
                     .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
@@ -673,10 +673,29 @@ app.post('/orders_get_from_user',(req,res)=>{
 app.post('/orders_get',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    getOrders(res);
+
+    let data = {};
+    data.res = res;
+
+    const promise = new Promise((resolve, reject) => getOrders(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
-function getOrders(res){
+app.post('/orders_get_list',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let data ={};
+    data.res = res;
+    const promise = new Promise((resolve, reject) => getOrders(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => ordersListMap(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+});
+
+function getOrders(data, resolve, reject){
+
+    console.log('getOrders');
+    let res = data.res;
+
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
@@ -684,8 +703,9 @@ function getOrders(res){
             const db = client.db(dbName);
             try {
                 await db.collection("orders").find().toArray(function (err, documents) {
-                    // console.log(documents);
-                    res.end(JSON.stringify(documents));
+                    console.log(documents);
+                    data.orders = documents;
+                    resolve(data);
                 });
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
@@ -695,6 +715,20 @@ function getOrders(res){
     });
 }
 
+
+function ordersListMap(data, resolve, reject){
+    let orders = data.orders;
+    let itemsMaped = [];
+    for( let item of items){
+        let itemTemp = {};
+        itemTemp.id = item.id;
+        itemTemp.sum = item.sum;
+        itemTemp.paymentTime = item.paymentTime;
+        itemsMaped.push(itemTemp);
+    }
+    data.orders = itemsMaped;
+    resolve(data);
+}
 
 // app.post('/order_get_by_id',(req,res)=>{
 //     console.log("We are in orderadd");
