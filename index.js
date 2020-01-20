@@ -719,6 +719,7 @@ function getOrders(data, resolve, reject){
 
 function ordersListMap(data, resolve, reject){
     let orders = data.orders;
+    let res = data.res;
     let itemsMaped = [];
     for( let order of orders){
         let itemTemp = {};
