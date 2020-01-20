@@ -78,7 +78,7 @@ function getItems(res){
 }
 
 
-app.get('/getitem',(req,res)=>{
+app.post('/getitem',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     //todo  fix id check
