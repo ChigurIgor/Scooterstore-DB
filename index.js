@@ -705,6 +705,7 @@ function getOrders(data, resolve, reject){
                 await db.collection("orders").find().toArray(function (err, documents) {
                     console.log(documents);
                     data.orders = documents;
+                    data.res = res;
                     resolve(data);
                 });
             } finally {
@@ -726,7 +727,8 @@ function ordersListMap(data, resolve, reject){
         itemTemp.paymentTime = order.paymentTime;
         itemsMaped.push(itemTemp);
     }
-    data = itemsMaped;
+    data.orders = itemsMaped;
+    data.res = res;
     resolve(data);
 }
 
