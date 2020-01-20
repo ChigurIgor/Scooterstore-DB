@@ -670,6 +670,31 @@ app.post('/orders_get_from_user',(req,res)=>{
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
     });
 
+app.post('/orders_get',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    getOrders(res);
+});
+
+function getOrders(res){
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+                await db.collection("orders").find().toArray(function (err, documents) {
+                    // console.log(documents);
+                    res.end(JSON.stringify(documents));
+                });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
+    });
+}
+
 
 // app.post('/order_get_by_id',(req,res)=>{
 //     console.log("We are in orderadd");
