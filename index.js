@@ -719,11 +719,11 @@ function getOrders(data, resolve, reject){
 function ordersListMap(data, resolve, reject){
     let orders = data.orders;
     let itemsMaped = [];
-    for( let item of items){
+    for( let order of orders){
         let itemTemp = {};
-        itemTemp.id = item.id;
-        itemTemp.sum = item.sum;
-        itemTemp.paymentTime = item.paymentTime;
+        itemTemp.id = order.id;
+        itemTemp.sum = order.sum;
+        itemTemp.paymentTime = order.paymentTime;
         itemsMaped.push(itemTemp);
     }
     data = itemsMaped;
