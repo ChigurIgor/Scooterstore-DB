@@ -81,14 +81,10 @@ function getItems(res){
 app.post('/getitem',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    //todo  fix id check
-    //  todo  --     rewrite
     console.log('getitem');
     let data ={};
     var post = req.body;
     data.id = post.id;
-    console.log(data);
-
     data.res = res;
 
     const promise = new Promise((resolve, reject) => getItem(data, resolve, reject))
@@ -100,7 +96,6 @@ function getItem(data, resolve, reject){
     console.log('getItem');
     let id = data.id;
     let res = data.res;
-
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
@@ -109,11 +104,10 @@ function getItem(data, resolve, reject){
             try {
                 let o_id = new mongo.ObjectID(id);
                 await db.collection("items").find({ "_id" : o_id }).toArray(function (err, documents) {
-                    console.log(documents);
                     if (documents.length == 0) {
                         resolve({msg: "Error occurred"});
                     } else {
-                        resolve(documents[0]);
+                        resolve({item: documents[0], res: res});
                     }
                 });
             } finally {
