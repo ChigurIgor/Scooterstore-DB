@@ -726,7 +726,7 @@ function ordersListMap(data, resolve, reject){
         itemTemp.paymentTime = item.paymentTime;
         itemsMaped.push(itemTemp);
     }
-    data.orders = itemsMaped;
+    data = itemsMaped;
     resolve(data);
 }
 
