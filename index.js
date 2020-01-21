@@ -729,11 +729,9 @@ function getOrders(data, resolve, reject){
 }
 
 function getOrderById(data, resolve, reject){
-
-    console.log('getOrders');
+    console.log('getOrdersById');
     let res = data.res;
     let id = data.id;
-
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
@@ -742,7 +740,7 @@ function getOrderById(data, resolve, reject){
             try {
 
                 let o_id = new mongo.ObjectID(id);
-                await db.collection("users").findOne({"_id" : o_id }, function(err, documents) {
+                await db.collection("orders").findOne({"_id" : o_id }, function(err, documents) {
                     if (err) throw err;
                     console.log(documents);
                     data.order = documents;
