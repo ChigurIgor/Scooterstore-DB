@@ -681,7 +681,7 @@ app.post('/orders_get',(req,res)=>{
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
-app.post('/orders_get_by_id',(req,res)=>{
+app.post('/orders_get_list',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     let data ={};
@@ -691,7 +691,7 @@ app.post('/orders_get_by_id',(req,res)=>{
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
-app.post('/order_get_list',(req,res)=>{
+app.post('/order_get_by_id',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     let data ={};
