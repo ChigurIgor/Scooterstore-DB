@@ -764,7 +764,7 @@ function ordersListMap(data, resolve, reject){
     let itemsMaped = [];
     for( let order of orders){
         let itemTemp = {};
-        itemTemp.id = order.id;
+        itemTemp._id = order._id;
         itemTemp.sum = order.sum;
         itemTemp.paymentTime = order.paymentTime;
         itemsMaped.push(itemTemp);
