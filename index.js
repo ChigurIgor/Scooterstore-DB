@@ -681,13 +681,25 @@ app.post('/orders_get',(req,res)=>{
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
-app.post('/orders_get_list',(req,res)=>{
+app.post('/orders_get_by_id',(req,res)=>{
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     let data ={};
     data.res = res;
     const promise = new Promise((resolve, reject) => getOrders(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => ordersListMap(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+});
+
+app.post('/order_get_list',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    let data ={};
+    var post = req.body;
+    console.log('order_get_list');
+    data.id = post.id;
+    data.res = res;
+    const promise = new Promise((resolve, reject) => getOrderById(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
@@ -705,6 +717,35 @@ function getOrders(data, resolve, reject){
                 await db.collection("orders").find().toArray(function (err, documents) {
                     console.log(documents);
                     data.orders = documents;
+                    data.res = res;
+                    resolve(data);
+                });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
+    });
+}
+
+function getOrderById(data, resolve, reject){
+
+    console.log('getOrders');
+    let res = data.res;
+    let id = data.id;
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+
+                let o_id = new mongo.ObjectID(id);
+                await db.collection("users").findOne({"_id" : o_id }, function(err, documents) {
+                    if (err) throw err;
+                    console.log(documents);
+                    data.order = documents;
                     data.res = res;
                     resolve(data);
                 });
