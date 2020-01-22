@@ -447,7 +447,6 @@ function getUserById(data, resolve, reject){
             // var allProductsArray = db.collection("phones").find().toArray();
             try {
                 let o_id = new mongo.ObjectID(uid);
-
                 await db.collection("users").findOne({"_id" : o_id },function (err, documents) {
                       console.log('getUserById');
                         console.log(documents);
