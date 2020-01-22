@@ -438,7 +438,6 @@ function loginFun(login,password,res){
 function getUserById(data, resolve, reject){
     let uid = data.uid;
     let res = data.res;
-
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
@@ -449,24 +448,18 @@ function getUserById(data, resolve, reject){
             try {
                 let o_id = new mongo.ObjectID(uid);
 
-                await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
-
-
-                        console.log('getUserById');
+                await db.collection("users").findOne({"_id" : o_id },function (err, documents) {
+                      console.log('getUserById');
                         console.log(documents);
-                        data.user = documents[0];
+                        delete documents.password;
+                        data.user = documents;
                         resolve(data);
-
-
-
-                });
+               });
             } finally {
                 if (mongoClientPromise) mongoClientPromise.close();
                 console.log("client.close()");
-
             }
         }
-
     });
 }
 
@@ -479,42 +472,44 @@ app.post('/user_get',(req,res)=>{
 
     var post = req.body;
     console.log('user_get');
-    data.uid = post.uid[0];
+    data.uid = post.uid;
     data.res = res;
     console.log(data);
- //  todo  --     rewrite
-    getUser(data);
+
+    const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
+
 });
 
-function getUser(data) {
-    console.log('getUser');
-    let uid = data.uid;
-    let res = data.res;
-    //  todo  --     rewrite
-
-    var mongoClientPromise = mongoClient.connect(async function (err, client) {
-        if (err){
-            console.error('An error occurred connecting to MongoDB: ',err);
-        }else {
-            const db = client.db(dbName);
-            try {
-                let o_id = new mongo.ObjectID(uid);
-                await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
-                    console.log(documents);
-                    if (documents.length == 0) {
-                        res.end(JSON.stringify({msg: "Error occurred"}));
-                    } else {
-                    delete documents[0].password;
-                    res.end(JSON.stringify(documents[0]));
-                }
-                });
-            } finally {
-                if (mongoClientPromise) mongoClientPromise.close();
-                console.log("client.close()");
-            }
-        }
-    });
-}
+// function getUser(data) {
+//     console.log('getUser');
+//     let uid = data.uid;
+//     let res = data.res;
+//     //  todo  --     rewrite
+//
+//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
+//         if (err){
+//             console.error('An error occurred connecting to MongoDB: ',err);
+//         }else {
+//             const db = client.db(dbName);
+//             try {
+//                 let o_id = new mongo.ObjectID(uid);
+//                 await db.collection("users").find({ "_id" : o_id }).toArray(function (err, documents) {
+//                     console.log(documents);
+//                     if (documents.length == 0) {
+//                         res.end(JSON.stringify({msg: "Error occurred"}));
+//                     } else {
+//                     delete documents[0].password;
+//                     res.end(JSON.stringify(documents[0]));
+//                 }
+//                 });
+//             } finally {
+//                 if (mongoClientPromise) mongoClientPromise.close();
+//                 console.log("client.close()");
+//             }
+//         }
+//     });
+// }
 
 
 app.post('/user_set',(req,res)=>{
@@ -893,30 +888,30 @@ function orderAddToAccount(data, resolve, reject){
 
 
 
-  function orderGetById(id){
-console.log('orderGetById');
-    var mongoClientPromise = mongoClient.connect(async function (err, client) {
-        if (err){
-            console.error('An error occurred connecting to MongoDB: ',err);
-        }else {
-            const db = client.db(dbName);
-            var answer = "0";
-            // var allProductsArray = db.collection("phones").find().toArray();
-            try {
-                let o_id = new mongo.ObjectID(id);
-                await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
-                    console.log(documents[0]);
-                        return documents[0];
-                });
-            } finally {
-                if (mongoClientPromise) mongoClientPromise.close();
-                console.log("client.close()");
-
-            }
-        }
-
-    });
-}
+//   function orderGetById(id){
+// console.log('orderGetById');
+//     var mongoClientPromise = mongoClient.connect(async function (err, client) {
+//         if (err){
+//             console.error('An error occurred connecting to MongoDB: ',err);
+//         }else {
+//             const db = client.db(dbName);
+//             var answer = "0";
+//             // var allProductsArray = db.collection("phones").find().toArray();
+//             try {
+//                 let o_id = new mongo.ObjectID(id);
+//                 await db.collection("orders").find({ "_id" : o_id }).toArray(function (err, documents) {
+//                     console.log(documents[0]);
+//                         return documents[0];
+//                 });
+//             } finally {
+//                 if (mongoClientPromise) mongoClientPromise.close();
+//                 console.log("client.close()");
+//
+//             }
+//         }
+//
+//     });
+// }
   function ordersGetFromAccount(data, resolve, reject){
     let data2 = {};
     data2.orders = data.user.orders || [];
