@@ -437,7 +437,10 @@ function loginFun(login,password,res){
 
 function getUserById(data, resolve, reject){
     let uid = data.uid;
-    let res = data.res;
+    if(uid == "0" || uid == null || uid || undefined){
+        data.msg = "ERROR";
+        resolve(data);
+    }
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
             console.error('An error occurred connecting to MongoDB: ',err);
