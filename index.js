@@ -607,27 +607,9 @@ app.post('/order_add',(req,res)=>{
     data.paymentPayerId="";
     data.paymentPayerAddress="";
 
-
     let body = '';
-    // console.log(req);
-    // console.log(req.toString());
-    // console.log("req.data.body");
-    // console.log(req.body);
-
-    // req.on('data', chunk => {
-    //     body += chunk.toString(); // convert Buffer to string
-    //     console.log(body);
-    //     console.log(chunk);
-    // });
-    // body= req.body;
-    // req.on('end', () => {
     var post = req.body;
-    // var post = qs.parse(body);
-    //     console.log("req.end");
-    //
-    //     console.log(body);
-
-    data.uid=post.uid[0];
+    data.uid=post.uid;
     data.items=post.items;
     data.sum=post.sum;
     data.paymentID=post.paymentID;
@@ -806,7 +788,7 @@ function ordersListMap(data, resolve, reject){
 //     //
 //     //     console.log(body);
 //
-//     data.uid=post.uid[0];
+//     data.uid=post.uid;
 //     data.items=post.items;
 //     data.sum=post.sum;
 //     data.paymentID=post.paymentID;
@@ -961,7 +943,7 @@ app.post('/cart_set',(req,res)=>{
 
     var post = req.body;
 
-    data.uid = post.uid[0];
+    data.uid = post.uid;
     data.cart = post.cart;
     data.res = res;
     console.log(data);
@@ -981,7 +963,7 @@ app.post('/cart_add',(req,res)=>{
 
     var post = req.body;
 
-    data.uid = post.uid[0];
+    data.uid = post.uid;
     data.item = post.item;
     data.quantity = post.quantity;
     data.res = res;
@@ -1257,8 +1239,8 @@ function getNews(res){
 //
 //             if(place.row === eventPlace.row && place.seat === eventPlace.seat){
 //                 eventPlace.status='reserved';
-//                 eventPlace.uid=uid[0];
-//                 console.log(uid[0]);
+//                 eventPlace.uid=uid;
+//                 console.log(uid);
 //                 eventPlace.time=Date.now();
 //             }
 //         }
