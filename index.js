@@ -1006,7 +1006,7 @@ app.post('/cart_get_from_user',(req,res)=>{
 
     var post = req.body;
 
-    data.uid = post.uid[0];
+    data.uid = post.uid;
     data.res = res;
     console.log(data);
 
