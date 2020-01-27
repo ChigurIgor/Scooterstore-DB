@@ -437,9 +437,11 @@ function loginFun(login,password,res){
 
 function getUserById(data, resolve, reject){
     let uid = data.uid;
-    if(uid == "0" || uid == null || uid || undefined){
+    console.log('getUserById');
+    console.log(uid);
+    if(uid === "" || uid == null || uid === undefined){
         data.msg = "ERROR";
-        resolve(data);
+        reject(data);
     }
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         if (err){
@@ -654,15 +656,13 @@ app.post('/orders_get_from_user',(req,res)=>{
     let data ={};
     data.uid="";
     let body = '';
-
     var post = req.body;
-
     data.uid = post.uid;
     console.log(data);
     data.res = res;
 
     const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
-        .then((data)=> { return new Promise((resolve, reject) => ordersGetFromAccount(data, resolve, reject))})
+        .then((data)=> { return new Promise((resolve, reject) => ordersGetFromAccount(data, resolve, reject))}, (error) => { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
         .then((data)=> { return new Promise((resolve, reject) => ordersGetByList(data, resolve, reject))})
         .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
     });
