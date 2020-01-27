@@ -657,9 +657,9 @@ app.post('/orders_get_from_user',(req,res)=>{
 
     var post = req.body;
 
-    data.uid = post.uid[0];
-    data.res = res;
+    data.uid = post.uid;
     console.log(data);
+    data.res = res;
 
     const promise = new Promise((resolve, reject) => getUserById(data, resolve, reject))
         .then((data)=> { return new Promise((resolve, reject) => ordersGetFromAccount(data, resolve, reject))})
