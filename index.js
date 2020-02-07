@@ -284,6 +284,50 @@ function itemSet(data, resolve, reject) {
     });
 }
 
+app.post('/getcategories',(req,res)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    console.log('getitem');
+    let data ={};
+    var post = req.body;
+    data.res = res;
+
+    const promise = new Promise((resolve, reject) => getCategories(data, resolve, reject))
+        .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))});
+
+});
+
+function getCategories(data, resolve, reject){
+    console.log('getCategories');
+    let res = data.res;
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+                await db.collection("items").find().toArray(function (err, documents) {
+                    if (documents.length == 0) {
+                        resolve({msg: "Error occurred"});
+                    } else {
+                        let categories = [];
+                        for( let document of documents){
+                            console.log(document.type);
+                            if (categories.indexOf(document.type) < 0){
+                                categories.push(document.type);
+                            }
+                        }
+                        resolve(categories);
+                    }
+                });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
+    });
+}
+
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
 //
@@ -1095,6 +1139,8 @@ function cartItemsGetByList(data, resolve, reject){
         }
     });
 }
+
+
 
 
 // // -------------------------------------------------------- cart --------------------------------------------------------------------------
