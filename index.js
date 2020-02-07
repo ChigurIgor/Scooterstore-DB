@@ -313,7 +313,7 @@ function getCategories(data, resolve, reject){
                         let categories = [];
                         for( let document of documents){
                             console.log(categories.findIndex(i => i.cat === document.cat));
-                            if (categories.findIndex(i => i.type === document.type) < 0){
+                            if (categories.findIndex(i => i.cat === document.cat) < 0){
                                 categories.push({type: document.type, cat: document.cat});
                             }
                         }
