@@ -317,7 +317,8 @@ function getCategories(data, resolve, reject){
                                 categories.push(document.type);
                             }
                         }
-                        resolve(categories);
+                        data.categories = categories;
+                        resolve(data);
                     }
                 });
             } finally {
