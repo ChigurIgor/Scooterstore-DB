@@ -312,9 +312,8 @@ function getCategories(data, resolve, reject){
                     } else {
                         let categories = [];
                         for( let document of documents){
-                            console.log(document.type);
                             if (categories.indexOf(document.type) < 0){
-                                categories.push(document.type);
+                                categories.push({type: document.type, cat: document.cat});
                             }
                         }
                         data.categories = categories;
