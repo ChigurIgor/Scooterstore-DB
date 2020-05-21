@@ -224,7 +224,7 @@ function itemDelete(data, resolve, reject) {
 }
 
 app.post('/item_set',(req,res)=>{
-    console.log("We are in item_delete");
+    console.log("We are in itemSet");
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', "*");
@@ -239,7 +239,7 @@ app.post('/item_set',(req,res)=>{
     data.type=post.item.type;
     data.cat=post.item.cat;
     data.id = post.id;
-    data.quantity = post.quantity;
+    data.quantity = post.item.quantity;
     console.log(data);
     data.res = res;
 
