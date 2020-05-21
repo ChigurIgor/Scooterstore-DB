@@ -240,6 +240,10 @@ app.post('/item_set',(req,res)=>{
     data.cat=post.item.cat;
     data.id = post.id;
     data.quantity = post.item.quantity;
+
+    console.log(post.item);
+    console.log('post.item');
+    console.log('data');
     console.log(data);
     data.res = res;
 
