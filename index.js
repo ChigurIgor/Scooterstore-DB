@@ -140,6 +140,7 @@ app.post('/item_add',(req,res)=>{
     data.price=post.item.price;
     data.type=post.item.type;
     data.cat=post.item.cat;
+    data.quantity = post.item.quantity;
     data.res = res;
 
     const promise = new Promise((resolve, reject) => itemAdd(data, resolve, reject))
@@ -163,6 +164,7 @@ function itemAdd(data, resolve, reject) {
             price:data.price,
             type:data.type,
             cat: data.cat,
+            quantity: data.quantity
             };
         console.log(item);
         try {
