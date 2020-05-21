@@ -239,6 +239,7 @@ app.post('/item_set',(req,res)=>{
     data.type=post.item.type;
     data.cat=post.item.cat;
     data.id = post.id;
+    data.quantity = post.quantity;
     console.log(data);
     data.res = res;
 
@@ -258,6 +259,7 @@ function itemSet(data, resolve, reject) {
     let price = data.price;
     let type = data.type;
     let cat = data.cat;
+    let quantity = data.quantity;
     var mongoClientPromise = mongoClient.connect(async function (err, client) {
         const db = client.db(dbName);
         var answer = "0";
@@ -274,7 +276,8 @@ function itemSet(data, resolve, reject) {
                                 material: material,
                                 price: price,
                                 type: type,
-                                cat: cat
+                                cat: cat,
+                                quantity: quantity
                             } }, function(err, documents) {
                         if (err) throw err;
                         resolve({ msg: "OK" ,res: res});
