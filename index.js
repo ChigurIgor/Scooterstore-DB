@@ -338,6 +338,50 @@ function getCategories(data, resolve, reject){
     });
 }
 
+function itemsSetQuantity(data, resolve, reject) {
+    console.log('itemsSetQuantity');
+    console.log('data');
+    console.log(data);
+    // let res = data.res;
+    // let id = data.id;
+    // let description = data.description;
+    // let imgs = data.imgs;
+    // let material = data.material;
+    // let name = data.name;
+    // let price = data.price;
+    // let type = data.type;
+    // let cat = data.cat;
+    // let quantity = data.quantity;
+    // var mongoClientPromise = mongoClient.connect(async function (err, client) {
+    //     const db = client.db(dbName);
+    //     var answer = "0";
+    //     // var allProductsArray = db.collection("items").find().toArray();
+    //     try {
+    //         let o_id = new mongo.ObjectID(id);
+    //         await db.collection("items")
+    //             .updateOne({"_id" : o_id },
+    //                 { $set:
+    //                         {
+    //                             name: name,
+    //                             description: description,
+    //                             imgs: imgs,
+    //                             material: material,
+    //                             price: price,
+    //                             type: type,
+    //                             cat: cat,
+    //                             quantity: quantity
+    //                         } }, function(err, documents) {
+    //                     if (err) throw err;
+    //                     resolve({ msg: "OK" ,res: res});
+    //                 });
+    //     } finally {
+    //         if (mongoClientPromise) mongoClientPromise.close();
+    //         console.log("client.close()");
+    //     }
+    // });
+    resolve(data);
+}
+
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
 //
 //
@@ -680,6 +724,7 @@ const promise = new Promise((resolve, reject) => orderAdd(data, resolve, reject)
                     .then((data)=> { return new Promise((resolve, reject) => getUserById(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => orderAddToAccount(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => setCart(data, resolve, reject))})
+                    .then((data)=> { return new Promise((resolve, reject) => itemsSetQuantity(data, resolve, reject))})
                     .then((data)=> { return new Promise((resolve, reject) => sendAnswer(data, resolve, reject))})
 });
 
@@ -886,7 +931,7 @@ function orderAdd(data, resolve, reject){
                     return console.log(err);
                     //todo -- add reject
                 }
-                resolve({orderId: result.ops[0]._id, uid: data.uid,res: res});
+                resolve({orderId: result.ops[0]._id, uid: data.uid,items: data.items, res: res});
                 // resolve({ msg: "OK" , orderId: result.ops[0]._id, uid: data.uid}, res);
             });
         } finally {
@@ -1073,7 +1118,9 @@ function setCart(data, resolve, reject){
             let o_id = new mongo.ObjectID(uid);
             await db.collection("users").updateOne({"_id" : o_id }, { $set: {cart: cart } }, function(err, documents) {
                 if (err) throw err;
-                resolve({ msg: "OK" ,res: res});
+                data.msg = "OK";
+                resolve(data);
+                // resolve({ msg: "OK" ,res: res});
             });
         } finally {
             if (mongoClientPromise) mongoClientPromise.close();
