@@ -342,6 +342,8 @@ function itemsSetQuantity(data, resolve, reject) {
     console.log('itemsSetQuantity');
     console.log('data');
     console.log(data);
+    let items = [];
+    items = data.items;
     // let res = data.res;
     // let id = data.id;
     // let description = data.description;
@@ -352,34 +354,67 @@ function itemsSetQuantity(data, resolve, reject) {
     // let type = data.type;
     // let cat = data.cat;
     // let quantity = data.quantity;
-    // var mongoClientPromise = mongoClient.connect(async function (err, client) {
-    //     const db = client.db(dbName);
-    //     var answer = "0";
-    //     // var allProductsArray = db.collection("items").find().toArray();
-    //     try {
-    //         let o_id = new mongo.ObjectID(id);
-    //         await db.collection("items")
-    //             .updateOne({"_id" : o_id },
-    //                 { $set:
-    //                         {
-    //                             name: name,
-    //                             description: description,
-    //                             imgs: imgs,
-    //                             material: material,
-    //                             price: price,
-    //                             type: type,
-    //                             cat: cat,
-    //                             quantity: quantity
-    //                         } }, function(err, documents) {
-    //                     if (err) throw err;
-    //                     resolve({ msg: "OK" ,res: res});
-    //                 });
-    //     } finally {
-    //         if (mongoClientPromise) mongoClientPromise.close();
-    //         console.log("client.close()");
-    //     }
-    // });
+
+
+
+for (let item of items){
+
+    var mongoClientPromise = mongoClient.connect(async function (err, client) {
+        if (err){
+            console.error('An error occurred connecting to MongoDB: ',err);
+        }else {
+            const db = client.db(dbName);
+            try {
+                let o_id = new mongo.ObjectID(item.id);
+                console.log("o_id");
+                console.log(o_id);
+                await db.collection("items").find({ "_id" : o_id }).toArray(function (err, documents) {
+                    if (documents.length == 0) {
+                        resolve({msg: "Error occurred"});
+                    } else {
+                        console.log("documents[0]");
+                        console.log(documents[0]);
+                        let quantityOld = documents[0].quantity;
+                        let quantityNew = quantityOld-item.quantity;
+                        console.log("quantityNew");
+                        console.log(quantityNew);
+                        var mongoClientPromise2 = mongoClient.connect(async function (err, client) {
+                            const db = client.db(dbName);
+                            var answer = "0";
+                            // var allProductsArray = db.collection("items").find().toArray();
+                            try {
+                                let o_id = new mongo.ObjectID(item.id);
+                                await db.collection("items")
+                                    .updateOne({"_id" : o_id },
+                                        { $set:
+                                                {
+                                                    quantity: quantityNew
+                                                } }, function(err, documents) {
+                                            if (err) throw err;
+                                            // resolve({ msg: "OK" ,res: res});
+                                        });
+                            } finally {
+                                if (mongoClientPromise2) mongoClientPromise2.close();
+                                console.log("client.close()");
+                            }
+                        });
+                    }
+                });
+            } finally {
+                if (mongoClientPromise) mongoClientPromise.close();
+                console.log("client.close()");
+            }
+        }
+    });
+}
+
+
     resolve(data);
+
+
+
+
+
 }
 
 // // -------------------------------------------------------- items --------------------------------------------------------------------------
